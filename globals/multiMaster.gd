@@ -120,18 +120,18 @@ func upnp_setup():
 	
 	var upnp = UPNP.new()
 	var discover_result = upnp.discover()
-	if discover_result == UPNP.UPNP_RESULT_SUCCESS:
+	if discover_result != UPNP.UPNP_RESULT_SUCCESS:
 		msg = "UPNP Discover Failed! Error %s" % discover_result
 		print(msg)
 		return msg
 	
-	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+	if !(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
 		msg = "UPNP Invalid Gateway!"
 		print(msg)
 		return msg
 	
 	var map_result = upnp.add_port_mapping(PORT)
-	if map_result == UPNP.UPNP_RESULT_SUCCESS:
+	if map_result != UPNP.UPNP_RESULT_SUCCESS:
 		msg = "UPNP Port Mapping Faiuled! Error %s" % map_result
 		print(msg)
 		return msg
