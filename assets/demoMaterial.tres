@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://q0m36n8xutf7"]
+
+[ext_resource type="Shader" uid="uid://lufvqmigheht" path="res://assets/baseShader.gdshader" id="1_3xyna"]
+[ext_resource type="Texture2D" uid="uid://coigk2dmyv5ot" path="res://assets/texture_12.png" id="2_djv4v"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_3xyna")
+shader_parameter/albedo = Color(0.416, 0.502, 0.663, 1)
+shader_parameter/texture_albedo = ExtResource("2_djv4v")
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/clearcoat = 0.0
+shader_parameter/clearcoat_roughness = 0.0
+shader_parameter/uv1_blend_sharpness = 0.1
+shader_parameter/uv1_scale = Vector3(0.5, 0.5, 0.5)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)

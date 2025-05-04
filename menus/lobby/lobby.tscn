@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvdawqf48mm2c"]
+
+[ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
+
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l1s41")
+levelPath = "res://levels/Test.tscn"
+joinCode = NodePath("Panel/VBoxContainer/Lobby code")
+playerName = NodePath("Panel/VBoxContainer/name")
+chat = NodePath("Panel2/Chat")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 66.2
+offset_top = 83.0
+offset_right = 248.2
+offset_bottom = 554.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Start" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Start game"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Join" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Join lobby"
+
+[node name="Lobby code" type="LineEdit" parent="Panel/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Lobby code here"
+alignment = 1
+
+[node name="host" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Host lobby"
+
+[node name="name" type="LineEdit" parent="Panel/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Username"
+alignment = 1
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 890.0
+offset_top = 92.0
+offset_right = 1098.0
+offset_bottom = 561.0
+
+[node name="Chat" type="RichTextLabel" parent="Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scroll_following = true
+
+[connection signal="pressed" from="Panel/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/host" to="." method="_on_host_pressed"]
