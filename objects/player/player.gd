@@ -5,6 +5,7 @@ extends CharacterBody3D
 @export var squash:Node3D
 @export var standCheck:ShapeCast3D
 @export var multSync:MultiplayerSynchronizer
+@export var pause:CanvasLayer
 
 @export_subgroup("Random crap")
 @export var slide_cooldown:Timer
@@ -98,6 +99,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("jump"):
 		if is_on_floor():
 			jump()
+	elif event.is_action_pressed("pause"):
+		pause.pause()
 
 func start_crouch():
 	if crouching: return

@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=8 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
+[ext_resource type="Script" uid="uid://t6xpggwig2h3" path="res://objects/player/pause.gd" id="3_jnjyq"]
 [ext_resource type="Texture2D" uid="uid://bryfs3k1jbijn" path="res://icon.svg" id="3_ssrue"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
@@ -28,7 +29,8 @@ properties/3/path = NodePath("MeshInstance3D:scale")
 properties/3/spawn = true
 properties/3/replication_mode = 2
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "slide_cooldown") groups=["player"]]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "pause", "slide_cooldown") groups=["player"]]
+process_mode = 1
 collision_layer = 2
 floor_constant_speed = true
 script = ExtResource("1_4vq5b")
@@ -37,6 +39,7 @@ collision = NodePath("CollisionShape3D")
 squash = NodePath("MeshInstance3D")
 standCheck = NodePath("stand check")
 multSync = NodePath("MultiplayerSynchronizer")
+pause = NodePath("pause")
 slide_cooldown = NodePath("slide cooldown")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -72,3 +75,57 @@ one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
+
+[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player")]
+process_mode = 2
+layer = 128
+visible = false
+script = ExtResource("3_jnjyq")
+player = NodePath("..")
+
+[node name="Panel" type="Panel" parent="pause"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="pause/Panel"]
+layout_mode = 0
+offset_left = 335.0
+offset_top = 37.0
+offset_right = 808.0
+offset_bottom = 88.0
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="pause/Panel"]
+layout_mode = 0
+offset_left = 434.0
+offset_top = 115.0
+offset_right = 716.0
+offset_bottom = 555.0
+
+[node name="continue" type="Button" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Back to Game"
+
+[node name="HSeparator" type="HSeparator" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="exit" type="Button" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Exit to Lobby"
+
+[node name="HSeparator2" type="HSeparator" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="quit" type="Button" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Quit Game"
+
+[connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
+[connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]
+[connection signal="pressed" from="pause/Panel/VBoxContainer/quit" to="pause" method="_on_quit_pressed"]

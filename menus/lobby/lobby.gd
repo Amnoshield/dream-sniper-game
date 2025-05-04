@@ -17,9 +17,40 @@ extends Control
 
 
 func _ready():
+	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	MultiMaster.player_connected.connect(player_joined)
 	MultiMaster.player_disconnected.connect(player_left)
+	
+	if !MultiMaster.player_info["name"].is_empty():
+		playerName.text = MultiMaster.player_info["name"]
+	if !MultiMaster.last_server_ip.is_empty():
+		joinCode.text = MultiMaster.last_server_ip
+	
+	if MultiMaster.players.size() > 1:
+		if multiplayer.get_unique_id() == 1:
+			start.disabled = false
+		else: 
+			start.disabled = true
+		
+		leave.disabled = false
+		host.disabled = true
+		join.disabled = true
+		playerName.editable = false
+		joinCode.editable = false
+		
+		for player in MultiMaster.players.keys():
+			player_joined(player, MultiMaster.players[player])
+	elif MultiMaster.players.size() == 1:
+		leave_lobby()
+	else:
+		start.disabled = true
+		leave.disabled = true
+		host.disabled = false
+		join.disabled = false
+		playerName.editable = true
+		joinCode.editable = true
+		print("Not in lobby")
 
 func _on_host_pressed() -> void:
 	if playerName.text.is_empty():

@@ -10,6 +10,7 @@ signal server_disconnected
 const PORT = 8000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS = 20
+var last_server_ip = ""
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
@@ -19,7 +20,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info:Dictionary = {"name": "Name"}
+var player_info:Dictionary = {"name": ""}
 
 var players_loaded = 0
 
