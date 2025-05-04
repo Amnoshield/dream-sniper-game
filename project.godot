@@ -11,19 +11,17 @@ config_version=5
 [application]
 
 config/name="dream-sniper-game"
-run/main_scene="uid://cn7klrv0isa57"
+run/main_scene="uid://dvdawqf48mm2c"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 MultiMaster="*res://globals/multiMaster.gd"
-Noray="*res://addons/netfox.noray/noray.gd"
-PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
-[editor_plugins]
+[display]
 
-enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg")
+window/stretch/mode="canvas_items"
 
 [input]
 

@@ -19,7 +19,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info = {"name": "Name"}
+var player_info:Dictionary = {"name": "Name"}
 
 var players_loaded = 0
 
@@ -30,7 +30,6 @@ func _ready():
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-
 func join_game(address = ""):
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
@@ -40,18 +39,17 @@ func join_game(address = ""):
 		return error
 	multiplayer.multiplayer_peer = peer
 
-
 func create_game():
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_CONNECTIONS)
 	if error:
-		return error
+		return [-1, error]
 	multiplayer.multiplayer_peer = peer
 	player_info["id"] = 1
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 	
-	upnp_setup()
+	return [0, upnp_setup()]
 
 
 func remove_multiplayer_peer():
@@ -73,7 +71,7 @@ func player_loaded():
 		players_loaded += 1
 		print("Players loaded: ", players_loaded, " / ", players.size())
 		if players_loaded == players.size():
-			$/root/Game.start_game()
+			get_tree().get_first_node_in_group("world root").start_game()
 			players_loaded = 0
 
 
@@ -111,22 +109,33 @@ func _on_connected_fail():
 
 
 func _on_server_disconnected():
+	print("Server disconnected :(")
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	server_disconnected.emit()
 
+
 func upnp_setup():
+	var msg
+	
 	var upnp = UPNP.new()
-	
 	var discover_result = upnp.discover()
-	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, \
-		"UPNP Discover Failed! Error %s" % discover_result)
+	if discover_result == UPNP.UPNP_RESULT_SUCCESS:
+		msg = "UPNP Discover Failed! Error %s" % discover_result
+		print(msg)
+		return msg
 	
-	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), \
-		"UPNP Invalid Gateway!")
+	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+		msg = "UPNP Invalid Gateway!"
+		print(msg)
+		return msg
 	
-	var map_result = upnp.add_port_mapping(PORT, 0, "Godot game")
-	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, \
-		"UPNP Port Mapping Faiuled! Error %s" % map_result)
+	var map_result = upnp.add_port_mapping(PORT)
+	if map_result == UPNP.UPNP_RESULT_SUCCESS:
+		msg = "UPNP Port Mapping Faiuled! Error %s" % map_result
+		print(msg)
+		return msg
 	
-	print("Success! Join Address: %s" % upnp.query_external_address())
+	msg = "Success! Join Address: %s" % upnp.query_external_address()
+	print(msg)
+	return msg

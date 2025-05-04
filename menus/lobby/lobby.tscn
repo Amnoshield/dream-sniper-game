@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "start", "join", "host", "leave")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,18 +11,24 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l1s41")
 levelPath = "res://levels/Test.tscn"
-joinCode = NodePath("Panel/VBoxContainer/Lobby code")
-playerName = NodePath("Panel/VBoxContainer/name")
-chat = NodePath("Panel2/Chat")
+joinCode = NodePath("control area/VBoxContainer/Lobby code")
+playerName = NodePath("control area/VBoxContainer/name")
+chat_box = NodePath("chat area/Chat")
+player_container = NodePath("player area/player container")
+player_template = NodePath("player area/player container/default")
+start = NodePath("control area/VBoxContainer/Start")
+join = NodePath("control area/VBoxContainer/Join")
+host = NodePath("control area/VBoxContainer/host")
+leave = NodePath("control area/VBoxContainer/leave")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="control area" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 66.2
 offset_top = 83.0
 offset_right = 248.2
 offset_bottom = 554.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="control area"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,39 +36,55 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Start" type="Button" parent="Panel/VBoxContainer"]
+[node name="Start" type="Button" parent="control area/VBoxContainer"]
 layout_mode = 2
-text = "Start game"
+disabled = true
+text = "Start Game"
 
-[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="control area/VBoxContainer"]
 layout_mode = 2
 
-[node name="Join" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Join lobby"
-
-[node name="Lobby code" type="LineEdit" parent="Panel/VBoxContainer"]
-layout_mode = 2
-placeholder_text = "Lobby code here"
-alignment = 1
-
-[node name="host" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Host lobby"
-
-[node name="name" type="LineEdit" parent="Panel/VBoxContainer"]
+[node name="name" type="LineEdit" parent="control area/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Username"
 alignment = 1
 
-[node name="Panel2" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 890.0
-offset_top = 92.0
-offset_right = 1098.0
-offset_bottom = 561.0
+[node name="Join" type="Button" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Join Lobby"
 
-[node name="Chat" type="RichTextLabel" parent="Panel2"]
+[node name="Lobby code" type="LineEdit" parent="control area/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Lobby Code Here"
+alignment = 1
+
+[node name="host" type="Button" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Host Lobby"
+
+[node name="HSeparator2" type="HSeparator" parent="control area/VBoxContainer"]
+layout_mode = 2
+
+[node name="leave" type="Button" parent="control area/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Leave Lobby"
+
+[node name="HSeparator3" type="HSeparator" parent="control area/VBoxContainer"]
+layout_mode = 2
+
+[node name="quit game" type="Button" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Quit Game"
+
+[node name="chat area" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 883.0
+offset_top = 86.0
+offset_right = 1091.0
+offset_bottom = 555.0
+
+[node name="Chat" type="RichTextLabel" parent="chat area"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,6 +93,47 @@ grow_horizontal = 2
 grow_vertical = 2
 scroll_following = true
 
-[connection signal="pressed" from="Panel/VBoxContainer/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/Join" to="." method="_on_join_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/host" to="." method="_on_host_pressed"]
+[node name="UPNP warning" type="Label" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 63.0
+text = "This uses universal plug and play to host. If you do not have it enabled or can't enable it have someone else host."
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="player area" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 326.0
+offset_top = 120.0
+offset_right = 812.0
+offset_bottom = 547.0
+
+[node name="player container" type="FlowContainer" parent="player area"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical = true
+
+[node name="default" type="Label" parent="player area/player container"]
+visible = false
+layout_mode = 2
+text = "Default Name"
+
+[node name="players" type="Label" parent="."]
+layout_mode = 0
+offset_left = 326.0
+offset_top = 88.0
+offset_right = 807.0
+offset_bottom = 111.0
+text = "Players"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="control area/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="control area/VBoxContainer/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="control area/VBoxContainer/leave" to="." method="_on_leave_pressed"]
+[connection signal="pressed" from="control area/VBoxContainer/quit game" to="." method="_on_quit_game_pressed"]

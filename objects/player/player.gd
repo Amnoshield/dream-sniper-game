@@ -34,8 +34,6 @@ func _ready():
 	multSync.set_multiplayer_authority(name.to_int())
 	
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
-	print("name: ", name)
-	print(multiplayer.get_unique_id())
 
 func _physics_process(delta: float) -> void:
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return

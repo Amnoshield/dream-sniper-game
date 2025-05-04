@@ -134,7 +134,5 @@ use_collision = true
 size = Vector3(2, 46.0974, 7.72607)
 material = SubResource("StandardMaterial3D_0lldd")
 
-[node name="network" type="Node" parent="."]
-
 [node name="Spawn 1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.57593, 0)
