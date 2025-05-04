@@ -17,7 +17,13 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Lobby="*res://globals/lobby.gd"
+MultiMaster="*res://globals/multiMaster.gd"
+Noray="*res://addons/netfox.noray/noray.gd"
+PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg")
 
 [input]
 

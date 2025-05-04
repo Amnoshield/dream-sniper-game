@@ -7,7 +7,7 @@ extends Control
 @export var chat:RichTextLabel
 
 func _on_host_pressed() -> void:
-	var error = Lobby.create_game()
+	var error = MultiMaster.create_game()
 	if error:
 		chat.text +=  "Error starting host.\n"
 		return
@@ -15,13 +15,12 @@ func _on_host_pressed() -> void:
 		chat.text += "Started hosting.\n"
 
 func _on_join_pressed() -> void:
-	var error = Lobby.join_game(joinCode.text)
+	var error = MultiMaster.join_game(joinCode.text)
 	if error:
 		chat.text += "Error joining lobby.\n"
 	else:
 		chat.text += "Lobby joined.\n"
-		Lobby.player_info["name"] = playerName.text
-
+		MultiMaster.player_info["name"] = playerName.text
 
 func _on_start_pressed() -> void:
-	Lobby.load_game.rpc(levelPath)
+	MultiMaster.load_game.rpc(levelPath)

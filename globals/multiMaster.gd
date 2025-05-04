@@ -7,7 +7,7 @@ signal player_connected(peer_id, player_info)
 signal player_disconnected(peer_id)
 signal server_disconnected
 
-const PORT = 7000
+const PORT = 8000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS = 20
 
@@ -50,6 +50,8 @@ func create_game():
 	player_info["id"] = 1
 	players[1] = player_info
 	player_connected.emit(1, player_info)
+	
+	upnp_setup()
 
 
 func remove_multiplayer_peer():
@@ -58,7 +60,7 @@ func remove_multiplayer_peer():
 
 
 # When the server decides to start the game from a UI scene,
-# do Lobby.load_game.rpc(filepath)
+# do MultiMaster.load_game.rpc(filepath)
 @rpc("call_local", "reliable")
 func load_game(game_scene_path):
 	get_tree().change_scene_to_file(game_scene_path)
@@ -112,3 +114,19 @@ func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	server_disconnected.emit()
+
+func upnp_setup():
+	var upnp = UPNP.new()
+	
+	var discover_result = upnp.discover()
+	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, \
+		"UPNP Discover Failed! Error %s" % discover_result)
+	
+	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), \
+		"UPNP Invalid Gateway!")
+	
+	var map_result = upnp.add_port_mapping(PORT, 0, "Godot game")
+	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, \
+		"UPNP Port Mapping Faiuled! Error %s" % map_result)
+	
+	print("Success! Join Address: %s" % upnp.query_external_address())

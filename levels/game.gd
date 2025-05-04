@@ -5,7 +5,7 @@ extends Node3D # Or Node2D.
 func _ready():
 	# Preconfigure game.
 
-	Lobby.player_loaded.rpc_id(1) # Tell the server that this peer has loaded.
+	MultiMaster.player_loaded.rpc_id(1) # Tell the server that this peer has loaded.
 
 
 # Called only on the server.
