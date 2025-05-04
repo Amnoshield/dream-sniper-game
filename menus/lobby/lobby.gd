@@ -79,6 +79,7 @@ func _on_join_pressed() -> void:
 		chat("Username required")
 		return
 	
+	MultiMaster.last_server_ip = joinCode.text
 	var error = MultiMaster.join_game(joinCode.text)
 	if error:
 		chat("Error joining lobby.")
