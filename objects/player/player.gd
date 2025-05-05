@@ -31,12 +31,20 @@ const MAX_SPEED = 15
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	#multSync
-	multSync.set_multiplayer_authority(name.to_int())
 	
-	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
+	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id():
+		cam.current = false
+	else:
+		cam.current = true
+	
+	position.y += 10
+
+func _enter_tree() -> void:
+	multSync.set_multiplayer_authority(name.to_int())
 
 func _physics_process(delta: float) -> void:
+	if !multiplayer.is_server():
+		pass
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
 	if_land()
 	

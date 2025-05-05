@@ -58,6 +58,8 @@ text = "Join Lobby"
 layout_mode = 2
 placeholder_text = "Lobby Code Here"
 alignment = 1
+emoji_menu_enabled = false
+clear_button_enabled = true
 
 [node name="host" type="Button" parent="control area/VBoxContainer"]
 layout_mode = 2
@@ -92,7 +94,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 2
+bbcode_enabled = true
 scroll_following = true
+selection_enabled = true
 
 [node name="UPNP warning" type="Label" parent="."]
 layout_mode = 0

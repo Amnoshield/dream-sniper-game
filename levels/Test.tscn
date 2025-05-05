@@ -136,3 +136,6 @@ material = SubResource("StandardMaterial3D_0lldd")
 
 [node name="Spawn 1" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.57593, 0)
+
+[node name="Spawn 2" type="Node3D" parent="." groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0729322, 2.57593, -5.9628)

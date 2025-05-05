@@ -6,6 +6,8 @@ extends Node
 signal player_connected(peer_id, player_info)
 signal player_disconnected(peer_id)
 signal server_disconnected
+signal kicked(msg)
+signal msg_received(msg)
 
 const PORT = 8000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
@@ -31,6 +33,7 @@ func _ready():
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
+
 func join_game(address = ""):
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
@@ -38,7 +41,9 @@ func join_game(address = ""):
 	var error = peer.create_client(address, PORT)
 	if error:
 		return error
+	
 	multiplayer.multiplayer_peer = peer
+
 
 func create_game():
 	var peer = ENetMultiplayerPeer.new()
@@ -122,21 +127,34 @@ func upnp_setup():
 	var upnp = UPNP.new()
 	var discover_result = upnp.discover()
 	if discover_result != UPNP.UPNP_RESULT_SUCCESS:
-		msg = "UPNP Discover Failed! Error %s" % discover_result
+		msg = "[color=yellow]UPNP Discover Failed! Error %s[/color]\nRunning in LAN mode instead" % discover_result
 		print(msg)
 		return msg
 	
 	if !(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
-		msg = "UPNP Invalid Gateway!"
+		msg = "[color=yellow]UPNP Invalid Gateway[/color]\nRunning in LAN mode instead"
 		print(msg)
 		return msg
 	
 	var map_result = upnp.add_port_mapping(PORT)
 	if map_result != UPNP.UPNP_RESULT_SUCCESS:
-		msg = "UPNP Port Mapping Faiuled! Error %s" % map_result
+		msg = "[color=yellow]UPNP Port Mapping Faiuled! Error %s[/color]\nRunning in LAN mode instead" % map_result
 		print(msg)
 		return msg
 	
-	msg = "Success! Join Address: %s" % upnp.query_external_address()
+	msg = "[color=green]Success! Join Address: %s[/color]" % upnp.query_external_address()
 	print(msg)
 	return msg
+
+
+@rpc("any_peer", "reliable")
+func _get_kicked(msg:String):
+	remove_multiplayer_peer()
+	get_tree().change_scene_to_file("res://menus/lobby/lobby.tscn")
+	await get_tree().create_timer(0.01).timeout
+	kicked.emit(msg)
+
+
+@rpc("any_peer", "reliable")
+func _get_msg(msg:String):
+	msg_received.emit(msg)
