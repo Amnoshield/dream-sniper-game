@@ -37,8 +37,6 @@ func _ready():
 	else:
 		cam.current = true
 	
-	position.y += 10
-
 func _enter_tree() -> void:
 	multSync.set_multiplayer_authority(name.to_int())
 
