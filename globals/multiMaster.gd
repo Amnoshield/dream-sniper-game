@@ -11,7 +11,7 @@ signal msg_received(msg)
 
 const PORT = 8000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
-const MAX_CONNECTIONS = 20
+const MAX_CONNECTIONS = 20-1 # subtract 1 because the host doesn't count
 var last_server_ip = ""
 
 # This will contain player info for every player,

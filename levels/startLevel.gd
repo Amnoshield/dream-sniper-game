@@ -12,8 +12,6 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		MultiMaster.player_connected.connect(player_joined)
 	
-	#if multiplayer.is_server():
-		pass
 	for player in MultiMaster.players:
 		var currentPlayer = playerScene.instantiate()
 		currentPlayer.name = str(MultiMaster.players[player].id)

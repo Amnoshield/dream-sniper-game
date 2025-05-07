@@ -5,11 +5,19 @@ extends CharacterBody3D
 @export var squash:Node3D
 @export var standCheck:ShapeCast3D
 @export var multSync:MultiplayerSynchronizer
-@export var pause:CanvasLayer
 
-@export_subgroup("Random crap")
+@export var hitscan:RayCast3D
+
+@export_subgroup("cooldowns")
 @export var slide_cooldown:Timer
-#@onready var worldRoot = get_tree().get_first_node_in_group("world root")
+@export var shoot_cooldown:Timer
+
+@export_subgroup("UI")
+@export var UI:CanvasLayer
+@export var pause:CanvasLayer
+@export var health_display:Label
+
+@onready var spawn_points = get_tree().get_nodes_in_group("PlayerSpawnPoint")
 
 var walking = false
 var crouching = false
@@ -17,6 +25,8 @@ var uncrouch = false
 var airborn = false
 
 var sense = 0.002
+
+var health = 100
 
 #consts
 const SPEED = 5
@@ -27,16 +37,24 @@ const RAY_LENGTH = 1000
 const ACC = 40.0
 const SLIDE_BOOST = 15
 const MAX_SPEED = 15
-
+#fighting stuff
+const DAMAGE_HEAD = 100
+const DAMAGE_BODY = 40
+const KB_OUT = 0
+const KB_IN = 10
+const MAX_HEALTH = 100
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id():
-		cam.current = false
-	else:
-		cam.current = true
+	multSync.set_multiplayer_authority(name.to_int())
 	
+	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
+		cam.current = true
+		UI.show()
+	else:
+		cam.current = false
+
 func _enter_tree() -> void:
 	multSync.set_multiplayer_authority(name.to_int())
 
@@ -86,6 +104,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_y(-event.relative.x * sense)
 		cam.rotate_x(-event.relative.y * sense)
 		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-75), deg_to_rad(75))
+	elif event.is_action_pressed("shoot"):
+		#take_damage(5, Vector3(0, 10, 0))
+		shoot()
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
@@ -164,3 +185,65 @@ func if_land():
 	
 	if Input.is_action_pressed("jump"):
 		jump()
+
+func shoot():
+	if !shoot_cooldown.is_stopped():
+		return
+	shoot_cooldown.start()
+	
+	hitscan.global_rotation.y = global_rotation.y
+	hitscan.global_rotation.x = cam.global_rotation.x
+	hitscan.global_position = cam.global_position
+	
+	var direction2D := Vector2(0, 1).rotated(-rotation.y)
+	var sideDirection2D := direction2D.rotated(PI/2)
+	var kb_angle := Vector3(direction2D.x, 0, direction2D.y).rotated(Vector3(sideDirection2D.x, 0, sideDirection2D.y), -cam.rotation.x)
+	
+	
+	velocity += kb_angle*KB_IN
+	
+	hitscan.force_raycast_update()
+	var hit:Node = hitscan.get_collider()
+	if !hit:
+		print("Nothing but air! 🤣")
+		return
+	
+	if hit.is_in_group("players"):
+		print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
+		hit.test_shot.rpc_id(int(hit.name), hitscan.global_position, hitscan.global_rotation, DAMAGE_BODY, kb_angle*KB_OUT)
+	else:
+		print("Hit a wall")
+
+@rpc("any_peer", "reliable", "call_remote")
+func test_shot(pos:Vector3, roation:Vector3, dmg:int, kb:Vector3):
+	hitscan.global_position = pos
+	hitscan.global_rotation = roation
+	
+	hitscan.force_raycast_update()
+	var hit:Node = hitscan.get_collider()
+	if !hit:
+		print("Nothing but air! 🤣")
+		return
+	
+	if hit.is_in_group("players") and hit == self:
+		print("I got hit")
+		take_damage(dmg, kb)
+	else:
+		print("Hit a wall")
+
+func take_damage(damage:int, knockback:Vector3):
+	health -= damage
+	velocity += knockback
+	
+	if health <= 0:
+		die()
+	update_health_display()
+
+func die():
+	print("I died:")
+	var spawn = spawn_points[randi_range(0, spawn_points.size()-1)]
+	global_position = spawn.global_position
+	health = 100
+
+func update_health_display():
+	health_display.text = str(health)+"/"+str(MAX_HEALTH)+"❤️"

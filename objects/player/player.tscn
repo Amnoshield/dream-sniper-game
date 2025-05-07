@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=9 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Script" uid="uid://t6xpggwig2h3" path="res://objects/player/pause.gd" id="3_jnjyq"]
@@ -15,6 +15,9 @@ height = 1.8
 radius = 0.45
 height = 1.7
 
+[sub_resource type="LabelSettings" id="LabelSettings_ssrue"]
+font_size = 20
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g7ett"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -29,18 +32,22 @@ properties/3/path = NodePath("MeshInstance3D:scale")
 properties/3/spawn = true
 properties/3/replication_mode = 2
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "pause", "slide_cooldown") groups=["player"]]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display") groups=["players"]]
 process_mode = 1
+transform = Transform3D(-0.0680153, 0, -0.997684, 0, 1, 0, 0.997684, 0, -0.0680153, 0, 0, 0)
 collision_layer = 2
-floor_constant_speed = true
 script = ExtResource("1_4vq5b")
 cam = NodePath("Camera3D")
 collision = NodePath("CollisionShape3D")
 squash = NodePath("MeshInstance3D")
 standCheck = NodePath("stand check")
 multSync = NodePath("MultiplayerSynchronizer")
+hitscan = NodePath("hitscan")
+slide_cooldown = NodePath("cooldowns/slide cooldown")
+shoot_cooldown = NodePath("cooldowns/shoot cooldown")
+UI = NodePath("UI")
 pause = NodePath("pause")
-slide_cooldown = NodePath("slide cooldown")
+health_display = NodePath("UI/bottom/health")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_jgssh")
@@ -55,23 +62,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_ykyjo")
 target_position = Vector3(0, 0.05, 0)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
+visible = false
 
-[node name="crosshair" type="CenterContainer" parent="CanvasLayer"]
+[node name="crosshair" type="CenterContainer" parent="UI"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/crosshair"]
+[node name="TextureRect" type="TextureRect" parent="UI/crosshair"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 texture = ExtResource("3_ssrue")
 expand_mode = 5
 
-[node name="slide cooldown" type="Timer" parent="."]
-one_shot = true
+[node name="bottom" type="ReferenceRect" parent="UI"]
+offset_left = 35.0
+offset_top = 569.0
+offset_right = 1107.0
+offset_bottom = 609.0
+
+[node name="health" type="Label" parent="UI/bottom"]
+layout_mode = 0
+offset_right = 162.0
+offset_bottom = 39.0
+text = "100/100 ❤️"
+label_settings = SubResource("LabelSettings_ssrue")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
@@ -125,6 +145,23 @@ layout_mode = 2
 [node name="quit" type="Button" parent="pause/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Quit Game"
+
+[node name="cooldowns" type="Node" parent="."]
+
+[node name="slide cooldown" type="Timer" parent="cooldowns"]
+one_shot = true
+
+[node name="shoot cooldown" type="Timer" parent="cooldowns"]
+one_shot = true
+
+[node name="hitscan" type="RayCast3D" parent="."]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+enabled = false
+exclude_parent = false
+target_position = Vector3(0, 0, -400)
+collision_mask = 3
+hit_back_faces = false
 
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]

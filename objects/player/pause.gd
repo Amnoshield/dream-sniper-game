@@ -22,6 +22,7 @@ func _on_continue_pressed() -> void:
 	unpause()
 
 func _on_quit_pressed() -> void:
+	MultiMaster.remove_multiplayer_peer()
 	get_tree().quit()
 
 func _on_exit_pressed() -> void:

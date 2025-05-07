@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "start", "join", "host", "leave")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "start", "join", "host", "leave")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -17,6 +17,7 @@ playerName = NodePath("control area/VBoxContainer/name")
 chat_box = NodePath("chat area/Chat")
 player_container = NodePath("player area/player container")
 player_template = NodePath("player area/player container/default")
+player_counter = NodePath("HBoxContainer/player counter/player tracker")
 start = NodePath("control area/VBoxContainer/Start")
 join = NodePath("control area/VBoxContainer/Join")
 host = NodePath("control area/VBoxContainer/host")
@@ -34,6 +35,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -56,7 +61,7 @@ text = "Join Lobby"
 
 [node name="Lobby code" type="LineEdit" parent="control area/VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Lobby Code Here"
+placeholder_text = "ip address Here"
 alignment = 1
 emoji_menu_enabled = false
 clear_button_enabled = true
@@ -92,6 +97,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = -4.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 2
@@ -103,10 +112,10 @@ selection_enabled = true
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 63.0
-text = "This uses universal plug and play to host. If you do not have it enabled or can't enable it have someone else host."
+text = "THIS USES UNIVERSAL PLUG AND PLAY TO HOST  (UPNP).
+ If you do not have it enabled or can't enable it have someone else host."
 horizontal_alignment = 1
 vertical_alignment = 1
-uppercase = true
 
 [node name="player area" type="Panel" parent="."]
 layout_mode = 0
@@ -120,6 +129,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = -4.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 vertical = true
@@ -129,14 +142,34 @@ visible = false
 layout_mode = 2
 text = "Default Name"
 
-[node name="players" type="Label" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 326.0
-offset_top = 88.0
-offset_right = 807.0
-offset_bottom = 111.0
+offset_left = 328.0
+offset_top = 87.0
+offset_right = 811.0
+offset_bottom = 112.0
+
+[node name="players" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(422, 0)
+layout_mode = 2
 text = "Players"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="player counter" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(57.055, 0)
+layout_mode = 2
+
+[node name="player tracker" type="Label" parent="HBoxContainer/player counter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1/21"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="control area/VBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]

@@ -8,6 +8,7 @@ extends Control
 @export var chat_box:RichTextLabel
 @export var player_container:FlowContainer
 @export var player_template:Label
+@export var player_counter:Label
 
 @export_category("Buttons")
 @export var start:Button
@@ -19,18 +20,18 @@ extends Control
 func _ready():
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	joinCode.text = MultiMaster.last_server_ip
+	
 	MultiMaster.player_connected.connect(player_joined)
 	MultiMaster.player_disconnected.connect(player_left)
 	MultiMaster.kicked.connect(kicked)
 	MultiMaster.msg_received.connect(chat)
+	multiplayer.connection_failed.connect(connection_failed)
 	
+	update_player_counter()
 	
 	if !MultiMaster.player_info["name"].is_empty():
-		MultiMaster.player_info["name"] = MultiMaster.player_info["name"].rstrip("⭐")
-		playerName.text = MultiMaster.player_info["name"]
-	if !MultiMaster.last_server_ip.is_empty():
-		joinCode.text = MultiMaster.last_server_ip
-	
+		playerName.text = MultiMaster.player_info["name"].rstrip("⭐")
 	
 	if MultiMaster.players.size() > 1 or (multiplayer.is_server() and MultiMaster.players.size()==1):
 		if multiplayer.is_server():
@@ -59,12 +60,8 @@ func kicked(msg:String):
 	chat(msg)
 
 func _on_host_pressed() -> void:
-	playerName.text = playerName.text.strip_edges()
-	if playerName.text.ends_with("⭐"):
-		chat("[color=red]Username can't end with \"⭐\"[/color]")
-		return
-	elif playerName.text.is_empty():
-		chat("[color=red]Username required[/color]")
+	var username = check_name(playerName.text)
+	if !username:
 		return
 	
 	chat("[color=green]Creating lobby ...[/color]")
@@ -86,12 +83,12 @@ func _on_host_pressed() -> void:
 		chat("[color=green]Started hosting.[/color]")
 
 func _on_join_pressed() -> void:
-	playerName.text = playerName.text.strip_edges()
-	if playerName.text.ends_with("⭐"):
-		chat("[color=red]Username can't end with \"⭐\"[/color]")
+	var username = check_name(playerName.text)
+	if !username:
 		return
-	elif playerName.text.is_empty():
-		chat("[color=red]Username required[/color]")
+	
+	if !joinCode.text.is_empty() and !joinCode.text.is_valid_ip_address():
+		chat("[color=red]invald ip address[/color]")
 		return
 	
 	MultiMaster.last_server_ip = joinCode.text
@@ -99,7 +96,7 @@ func _on_join_pressed() -> void:
 	if error:
 		chat("[color=red]Problem joining lobby. Error %s[/color]" % error)
 	else:
-		chat("[color=green]Lobby joined.[/color]")
+		chat("Joining lobby, this may take a minute ...")
 		MultiMaster.player_info["name"] = playerName.text
 		start.disabled = true
 		leave.disabled = false
@@ -130,6 +127,7 @@ func leave_lobby():
 	playerName.editable = true
 	joinCode.editable = true
 	chat("Left lobby")
+	update_player_counter()
 
 func chat(text:String):
 	chat_box.text += text+'\n'
@@ -142,6 +140,7 @@ func player_joined(id, info):
 	new_player.text = info.name
 	player_container.add_child(new_player)
 	new_player.show()
+	update_player_counter()
 
 func player_left(id):
 	if id == 1:
@@ -151,3 +150,27 @@ func player_left(id):
 		for child in player_container.get_children():
 			if child.name == str(id):
 				child.queue_free()
+	
+	update_player_counter()
+
+func connection_failed():
+	chat("[color=yellow]Connection to server failed ☹️[/color]")
+	leave_lobby()
+
+func update_player_counter():
+	print("updating player counter")
+	player_counter.text = str(MultiMaster.players.size())+"/"+str(MultiMaster.MAX_CONNECTIONS+1)
+
+func check_name(username:String):
+	username = username.strip_edges()
+	if username.ends_with("⭐"):
+		chat("[color=red]Username can't end with \"⭐\"[/color]")
+		return false
+	elif username.is_empty():
+		chat("[color=red]Username required[/color]")
+		return false
+	elif username.length() > 10:
+		chat("[color=red]Username can't be longer than 10 characters[/color]")
+		return false
+	
+	return username
