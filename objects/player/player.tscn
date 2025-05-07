@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=13 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
+[ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
 [ext_resource type="Script" uid="uid://t6xpggwig2h3" path="res://objects/player/pause.gd" id="3_jnjyq"]
 [ext_resource type="Texture2D" uid="uid://bryfs3k1jbijn" path="res://icon.svg" id="3_ssrue"]
 
@@ -28,11 +29,54 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Camera3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath("MeshInstance3D:scale")
+properties/3/path = NodePath(".:visible")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath("MeshInstance3D:scale")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display") groups=["players"]]
+[sub_resource type="Animation" id="Animation_xkryw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.416, 0.502, 0.663, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gnkmh"]
+resource_name = "hurt"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(0.694118, 0, 0.203922, 1), Color(0.416, 0.502, 0.663, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ow0dq"]
+_data = {
+&"RESET": SubResource("Animation_xkryw"),
+&"hurt": SubResource("Animation_gnkmh")
+}
+
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display") groups=["players"]]
 process_mode = 1
 transform = Transform3D(-0.0680153, 0, -0.997684, 0, 1, 0, 0.997684, 0, -0.0680153, 0, 0, 0)
 collision_layer = 2
@@ -42,6 +86,7 @@ collision = NodePath("CollisionShape3D")
 squash = NodePath("MeshInstance3D")
 standCheck = NodePath("stand check")
 multSync = NodePath("MultiplayerSynchronizer")
+ani = NodePath("AnimationPlayer")
 hitscan = NodePath("hitscan")
 slide_cooldown = NodePath("cooldowns/slide cooldown")
 shoot_cooldown = NodePath("cooldowns/shoot cooldown")
@@ -53,6 +98,8 @@ health_display = NodePath("UI/bottom/health")
 shape = SubResource("CapsuleShape3D_jgssh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_jnjyq")
+instance_shader_parameters/albedo = Color(0.416, 0.502, 0.663, 1)
 mesh = SubResource("CapsuleMesh_xkryw")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -162,6 +209,11 @@ exclude_parent = false
 target_position = Vector3(0, 0, -400)
 collision_mask = 3
 hit_back_faces = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ow0dq")
+}
 
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]

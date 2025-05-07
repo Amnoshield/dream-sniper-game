@@ -5,6 +5,7 @@ extends CharacterBody3D
 @export var squash:Node3D
 @export var standCheck:ShapeCast3D
 @export var multSync:MultiplayerSynchronizer
+@export var ani:AnimationPlayer
 
 @export var hitscan:RayCast3D
 
@@ -105,7 +106,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		cam.rotate_x(-event.relative.y * sense)
 		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-75), deg_to_rad(75))
 	elif event.is_action_pressed("shoot"):
-		#take_damage(5, Vector3(0, 10, 0))
+		if !visible:return
 		shoot()
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -187,8 +188,7 @@ func if_land():
 		jump()
 
 func shoot():
-	if !shoot_cooldown.is_stopped():
-		return
+	if !shoot_cooldown.is_stopped(): return
 	shoot_cooldown.start()
 	
 	hitscan.global_rotation.y = global_rotation.y
@@ -235,15 +235,25 @@ func take_damage(damage:int, knockback:Vector3):
 	health -= damage
 	velocity += knockback
 	
+	ani.play("hurt")
+	
 	if health <= 0:
 		die()
 	update_health_display()
 
 func die():
 	print("I died:")
+	
+	visible = false
+	shoot_cooldown.stop()
+	
+	await get_tree().create_timer(2).timeout
+	
 	var spawn = spawn_points[randi_range(0, spawn_points.size()-1)]
 	global_position = spawn.global_position
 	health = 100
+	visible = true
+	update_health_display()
 
 func update_health_display():
 	health_display.text = str(health)+"/"+str(MAX_HEALTH)+"❤️"
