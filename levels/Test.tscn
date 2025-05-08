@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c50hog54k1s0c" path="res://levels/textures/forest_leaves_02_diffuse_1k.png" id="3_yqpgv"]
 [ext_resource type="Material" uid="uid://lwdx5tmq41fr" path="res://levels/textures/brick.tres" id="4_hkccl"]
 [ext_resource type="Texture2D" uid="uid://ce8e07ptfpste" path="res://levels/textures/forest_leaves_02_nor_gl_1k.png" id="4_vub2e"]
-[ext_resource type="PackedScene" uid="uid://b5pcegn33gjmj" path="res://assets/skyscraper.tscn" id="7_vub2e"]
+[ext_resource type="PackedScene" path="res://assets/skyscraper.tscn" id="7_vub2e"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0lldd"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -183,6 +183,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0562, 2.57593, -18.2517)
 
 [node name="Spawn 5" type="Node3D" parent="spawn points" groups=["PlayerSpawnPoint"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.8585, 2.57593, 24.6895)
+
 [node name="skyscraper" parent="." instance=ExtResource("7_vub2e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 355.885, 2.13981, 61.5603)
 

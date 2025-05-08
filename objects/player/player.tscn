@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=19 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
@@ -11,6 +11,10 @@ height = 1.8
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xkryw"]
 height = 1.8
+
+[sub_resource type="TorusMesh" id="TorusMesh_jnjyq"]
+inner_radius = 0.02
+outer_radius = 0.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ykyjo"]
 radius = 0.45
@@ -83,6 +87,9 @@ properties/4/replication_mode = 2
 properties/5/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
 properties/5/spawn = true
 properties/5/replication_mode = 2
+properties/6/path = NodePath("Camera3D:position")
+properties/6/spawn = true
+properties/6/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -147,7 +154,7 @@ _data = {
 
 [node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display") groups=["players"]]
 process_mode = 1
-transform = Transform3D(-0.0680153, 0, -0.997684, 0, 1, 0, 0.997684, 0, -0.0680153, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 2
 script = ExtResource("1_4vq5b")
 cam = NodePath("Camera3D")
@@ -173,6 +180,10 @@ mesh = SubResource("CapsuleMesh_xkryw")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="eyes" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61934e-06, 0.00117853, -0.23178)
+mesh = SubResource("TorusMesh_jnjyq")
 
 [node name="stand check" type="ShapeCast3D" parent="."]
 shape = SubResource("CapsuleShape3D_ykyjo")

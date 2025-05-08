@@ -54,6 +54,7 @@ func _ready():
 	
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
+		$Camera3D/eyes.visible = false
 	else:
 		cam.current = false
 		UI.hide()
