@@ -25,7 +25,9 @@ var crouching = false
 var uncrouch = false
 var airborn = false
 
-var sense = 0.002
+var sense := 0.002
+var scope_mult := 3
+var sense_scope_mult := 3
 
 var health = 100
 
@@ -52,9 +54,9 @@ func _ready():
 	
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
-		#UI.show()
 	else:
 		cam.current = false
+		UI.hide()
 
 func _enter_tree() -> void:
 	multSync.set_multiplayer_authority(name.to_int())
@@ -108,6 +110,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("shoot"):
 		if !visible:return
 		shoot()
+	elif event.is_action("scope"):
+		if event.is_action_pressed("scope"):
+			cam.fov /= scope_mult
+			sense /= sense_scope_mult
+		else:
+			cam.fov *= scope_mult
+			sense *= sense_scope_mult
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
