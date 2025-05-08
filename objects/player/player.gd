@@ -232,14 +232,14 @@ func test_shot(pos:Vector3, roation:Vector3, dmg:int, kb:Vector3):
 	hitscan.force_raycast_update()
 	var hit:Node = hitscan.get_collider()
 	if !hit:
-		print("Nothing but air! 🤣")
+		print("They missed")
 		return
 	
 	if hit.is_in_group("players") and hit == self:
 		print("I got hit")
 		take_damage(dmg, kb)
 	else:
-		print("Hit a wall")
+		print("They missed")
 
 func take_damage(damage:int, knockback:Vector3):
 	health -= damage
@@ -252,7 +252,7 @@ func take_damage(damage:int, knockback:Vector3):
 	update_health_display()
 
 func die():
-	print("I died:")
+	print("I died")
 	
 	visible = false
 	shoot_cooldown.stop()
