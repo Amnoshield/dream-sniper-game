@@ -52,7 +52,7 @@ func _ready():
 	
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
-		UI.show()
+		#UI.show()
 	else:
 		cam.current = false
 
@@ -190,6 +190,7 @@ func if_land():
 func shoot():
 	if !shoot_cooldown.is_stopped(): return
 	shoot_cooldown.start()
+	$UI/crosshair/TextureRect/AnimationPlayer.play("reload")
 	
 	hitscan.global_rotation.y = global_rotation.y
 	hitscan.global_rotation.x = cam.global_rotation.x
