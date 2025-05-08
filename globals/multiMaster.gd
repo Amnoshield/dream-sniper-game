@@ -18,6 +18,9 @@ var last_server_ip = ""
 # with the keys being each player's unique IDs.
 var players = {}
 
+# Lobby settings
+var lobby_settings = {"wysiwyg":false}
+
 # This is the local player info. This should be modified locally
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
@@ -55,7 +58,7 @@ func create_game():
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 	
-	return [0, upnp_setup()]
+	return [0, _upnp_setup()]
 
 
 func remove_multiplayer_peer():
@@ -121,7 +124,7 @@ func _on_server_disconnected():
 	server_disconnected.emit()
 
 
-func upnp_setup():
+func _upnp_setup():
 	var msg
 	
 	var upnp = UPNP.new()
@@ -148,7 +151,7 @@ func upnp_setup():
 
 
 @rpc("any_peer", "reliable")
-func _get_kicked(msg:String):
+func get_kicked(msg:String):
 	remove_multiplayer_peer()
 	get_tree().change_scene_to_file("res://menus/lobby/lobby.tscn")
 	await get_tree().create_timer(0.01).timeout
@@ -156,5 +159,11 @@ func _get_kicked(msg:String):
 
 
 @rpc("any_peer", "reliable")
-func _get_msg(msg:String):
+func get_msg(msg:String):
 	msg_received.emit(msg)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func update_lobby_setting(settings:Dictionary):
+	lobby_settings = settings
+	print("lobby setttings updated: ", settings)

@@ -220,7 +220,10 @@ func shoot():
 	
 	if hit.is_in_group("players"):
 		print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
-		hit.test_shot.rpc_id(int(hit.name), hitscan.global_position, hitscan.global_rotation, DAMAGE_BODY, kb_angle*KB_OUT)
+		if MultiMaster.lobby_settings.wysiwyg:
+			hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
+		else:
+			hit.test_shot.rpc_id(int(hit.name), hitscan.global_position, hitscan.global_rotation, DAMAGE_BODY, kb_angle*KB_OUT)
 	else:
 		print("Hit a wall")
 
@@ -241,6 +244,7 @@ func test_shot(pos:Vector3, roation:Vector3, dmg:int, kb:Vector3):
 	else:
 		print("They missed")
 
+@rpc("any_peer", "reliable", "call_remote")
 func take_damage(damage:int, knockback:Vector3):
 	health -= damage
 	velocity += knockback

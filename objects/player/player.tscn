@@ -226,12 +226,13 @@ texture = SubResource("GradientTexture2D_gnkmh")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
 
-[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player")]
+[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "wysiwyg")]
 process_mode = 2
 layer = 128
 visible = false
 script = ExtResource("3_jnjyq")
 player = NodePath("..")
+wysiwyg = NodePath("Panel/wysiwyg")
 
 [node name="Panel" type="Panel" parent="pause"]
 anchors_preset = 15
@@ -276,6 +277,18 @@ layout_mode = 2
 layout_mode = 2
 text = "Quit Game"
 
+[node name="wysiwyg" type="CheckButton" parent="pause/Panel"]
+layout_mode = 0
+offset_left = 957.0
+offset_top = 13.0
+offset_right = 1099.0
+offset_bottom = 59.0
+tooltip_text = "What is see is what you get.
+
+If you hit someone on your screen they will take damage."
+disabled = true
+text = "WYSIWYG"
+
 [node name="cooldowns" type="Node" parent="."]
 
 [node name="slide cooldown" type="Timer" parent="cooldowns"]
@@ -302,3 +315,4 @@ libraries = {
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/quit" to="pause" method="_on_quit_pressed"]
+[connection signal="toggled" from="pause/Panel/wysiwyg" to="pause" method="_on_wysiwyg_toggled"]
