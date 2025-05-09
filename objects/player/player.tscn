@@ -252,6 +252,9 @@ properties/7/replication_mode = 2
 properties/8/path = NodePath(".:health")
 properties/8/spawn = true
 properties/8/replication_mode = 2
+properties/9/path = NodePath("audio/shoot:playing")
+properties/9/spawn = true
+properties/9/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -524,9 +527,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_ow0dq")
 }
 
-[node name="audio" type="Node" parent="."]
+[node name="audio" type="Node3D" parent="."]
 
-[node name="shoot" type="AudioStreamPlayer" parent="audio"]
+[node name="shoot" type="AudioStreamPlayer3D" parent="audio"]
 stream = SubResource("AudioStreamRandomizer_bi5m7")
 volume_db = -10.0
 
