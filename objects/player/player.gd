@@ -17,6 +17,11 @@ extends CharacterBody3D
 @export var UI:CanvasLayer
 @export var pause:CanvasLayer
 @export var health_display:Label
+@export var reload_ani:AnimationPlayer
+@export var hit_ani:AnimationPlayer
+
+@export_subgroup("sync")
+@export var health = 100
 
 @onready var spawn_points = get_tree().get_nodes_in_group("PlayerSpawnPoint")
 
@@ -28,8 +33,6 @@ var airborn = false
 var sense := 0.002
 var scope_mult := 3
 var sense_scope_mult := 3
-
-var health = 100
 
 #consts
 const SPEED = 5
@@ -200,7 +203,9 @@ func if_land():
 func shoot():
 	if !shoot_cooldown.is_stopped(): return
 	shoot_cooldown.start()
-	$UI/crosshair/TextureRect/AnimationPlayer.play("reload")
+	$audio/shoot.play()
+	
+	reload_ani.play("reload")
 	
 	hitscan.global_rotation.y = global_rotation.y
 	hitscan.global_rotation.x = cam.global_rotation.x
@@ -219,12 +224,15 @@ func shoot():
 		print("Nothing but air! 🤣")
 		return
 	
-	if hit.is_in_group("players"):
+	if hit.is_in_group("players") and hit.visible:
 		print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
-		if MultiMaster.lobby_settings.wysiwyg:
-			hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
+		hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
+		if hit.health - DAMAGE_BODY < 0:
+			$audio/kill.play()
+			hit_ani.play("kill")
 		else:
-			hit.test_shot.rpc_id(int(hit.name), hitscan.global_position, hitscan.global_rotation, DAMAGE_BODY, kb_angle*KB_OUT)
+			hit_ani.play("hit")
+			#$audio/hit.play()
 	else:
 		print("Hit a wall")
 

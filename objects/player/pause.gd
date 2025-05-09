@@ -2,12 +2,9 @@ extends CanvasLayer
 
 @export var player:CharacterBody3D
 @export var lobbyPath:String = "res://menus/lobby/lobby.tscn"
-@export var wysiwyg:CheckButton
 
 func _ready():
 	visible = false
-	if multiplayer.is_server():
-		wysiwyg.disabled = false
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if player.multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
@@ -15,7 +12,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		call_deferred("unpause")
 
 func pause():
-	wysiwyg.set_pressed_no_signal(MultiMaster.lobby_settings.wysiwyg)
 	visible = true
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -38,7 +34,3 @@ func _on_exit_pressed() -> void:
 	else:
 		MultiMaster.remove_multiplayer_peer()
 		get_tree().change_scene_to_file(lobbyPath)
-
-func _on_wysiwyg_toggled(state: bool) -> void:
-	MultiMaster.lobby_settings.wysiwyg = state
-	MultiMaster.update_lobby_setting.rpc(MultiMaster.lobby_settings)

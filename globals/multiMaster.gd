@@ -18,8 +18,6 @@ var last_server_ip = ""
 # with the keys being each player's unique IDs.
 var players = {}
 
-# Lobby settings
-var lobby_settings = {"wysiwyg":false}
 
 # This is the local player info. This should be modified locally
 # before the connection is made. It will be passed to every other peer.
@@ -161,9 +159,3 @@ func get_kicked(msg:String):
 @rpc("any_peer", "reliable")
 func get_msg(msg:String):
 	msg_received.emit(msg)
-
-
-@rpc("any_peer", "call_local", "reliable")
-func update_lobby_setting(settings:Dictionary):
-	lobby_settings = settings
-	print("lobby setttings updated: ", settings)

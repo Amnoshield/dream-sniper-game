@@ -1,9 +1,14 @@
-[gd_scene load_steps=19 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=31 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
 [ext_resource type="Script" uid="uid://t6xpggwig2h3" path="res://objects/player/pause.gd" id="3_jnjyq"]
-[ext_resource type="Texture2D" uid="uid://bryfs3k1jbijn" path="res://icon.svg" id="3_ssrue"]
+[ext_resource type="Texture2D" uid="uid://csgsy3h57kfh4" path="res://assets/ui/crosshair.png" id="3_m4kly"]
+[ext_resource type="Texture2D" uid="uid://b2dpqaajghmyw" path="res://assets/ui/reload 1.png" id="4_xgwla"]
+[ext_resource type="AudioStream" uid="uid://daf3au5j6dllm" path="res://assets/sfx/revovler-sound-328431.wav" id="5_ow0dq"]
+[ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="6_m4kly"]
+[ext_resource type="AudioStream" uid="uid://ccfxbm143ms2d" path="res://assets/sfx/hit.mp3" id="7_m4kly"]
+[ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
 radius = 0.45
@@ -20,27 +25,12 @@ outer_radius = 0.4
 radius = 0.45
 height = 1.7
 
-[sub_resource type="Animation" id="Animation_jnjyq"]
-resource_name = "reload"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../../crosshair/TextureRect:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(6.49802, 1),
-"update": 0,
-"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_ow0dq"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../../crosshair/TextureRect:modulate")
+tracks/0/path = NodePath("../../crosshair/crosshair:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -49,11 +39,177 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../crosshair/TextureRect2:value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_jnjyq"]
+resource_name = "reload"
+length = 1.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("../../crosshair/crosshair:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(6.49802, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../crosshair/TextureRect2:value")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 100.0, 0.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m4kly"]
 _data = {
 &"RESET": SubResource("Animation_ow0dq"),
 &"reload": SubResource("Animation_jnjyq")
+}
+
+[sub_resource type="Animation" id="Animation_xgwla"]
+resource_name = "hit"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(4, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("../../crosshair2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(4),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../crosshair2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_bi5m7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../crosshair2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../crosshair2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_psowp"]
+resource_name = "kill"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(4, 1),
+"update": 1,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("../../crosshair2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(4, 1),
+"update": 1,
+"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../crosshair2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_45urx"]
+_data = {
+&"RESET": SubResource("Animation_bi5m7"),
+&"hit": SubResource("Animation_xgwla"),
+&"kill": SubResource("Animation_psowp")
 }
 
 [sub_resource type="LabelSettings" id="LabelSettings_ssrue"]
@@ -90,6 +246,12 @@ properties/5/replication_mode = 2
 properties/6/path = NodePath("Camera3D:position")
 properties/6/spawn = true
 properties/6/replication_mode = 2
+properties/7/path = NodePath("CollisionShape3D:shape:height")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath(".:health")
+properties/8/spawn = true
+properties/8/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -152,9 +314,26 @@ _data = {
 &"hurt": SubResource("Animation_gnkmh")
 }
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display") groups=["players"]]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bi5m7"]
+random_pitch = 1.2
+random_volume_offset_db = 1.0
+streams_count = 1
+stream_0/stream = ExtResource("5_ow0dq")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_psowp"]
+random_pitch = 1.2
+random_volume_offset_db = 1.0
+streams_count = 2
+stream_0/stream = ExtResource("6_m4kly")
+stream_0/weight = 0.0
+stream_1/stream = ExtResource("7_m4kly")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_45urx"]
+streams_count = 1
+stream_0/stream = ExtResource("7_xgwla")
+
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani") groups=["players"]]
 process_mode = 1
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 2
 script = ExtResource("1_4vq5b")
 cam = NodePath("Camera3D")
@@ -169,6 +348,8 @@ shoot_cooldown = NodePath("cooldowns/shoot cooldown")
 UI = NodePath("UI")
 pause = NodePath("pause")
 health_display = NodePath("UI/bottom/health")
+reload_ani = NodePath("UI/crosshair/crosshair/reload")
+hit_ani = NodePath("UI/crosshair/crosshair/hit")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_jgssh")
@@ -191,6 +372,27 @@ target_position = Vector3(0, 0.05, 0)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
+[node name="crosshair2" type="TextureRect" parent="UI"]
+visible = false
+modulate = Color(1, 0, 0, 1)
+texture_filter = 1
+custom_minimum_size = Vector2(20, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.785398
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("3_m4kly")
+expand_mode = 5
+
 [node name="crosshair" type="CenterContainer" parent="UI"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -198,17 +400,29 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="UI/crosshair"]
-custom_minimum_size = Vector2(10, 0)
+[node name="crosshair" type="TextureRect" parent="UI/crosshair"]
+texture_filter = 1
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
-texture = ExtResource("3_ssrue")
+texture = ExtResource("3_m4kly")
 expand_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/crosshair/TextureRect"]
+[node name="reload" type="AnimationPlayer" parent="UI/crosshair/crosshair"]
 root_node = NodePath("../../../bottom/health")
 libraries = {
 &"": SubResource("AnimationLibrary_m4kly")
 }
+
+[node name="hit" type="AnimationPlayer" parent="UI/crosshair/crosshair"]
+libraries = {
+&"": SubResource("AnimationLibrary_45urx")
+}
+
+[node name="TextureRect2" type="TextureProgressBar" parent="UI/crosshair"]
+layout_mode = 2
+fill_mode = 8
+radial_initial_angle = 180.0
+texture_progress = ExtResource("4_xgwla")
 
 [node name="bottom" type="ReferenceRect" parent="UI"]
 offset_left = 35.0
@@ -237,13 +451,12 @@ texture = SubResource("GradientTexture2D_gnkmh")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
 
-[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "wysiwyg")]
+[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player")]
 process_mode = 2
 layer = 128
 visible = false
 script = ExtResource("3_jnjyq")
 player = NodePath("..")
-wysiwyg = NodePath("Panel/wysiwyg")
 
 [node name="Panel" type="Panel" parent="pause"]
 anchors_preset = 15
@@ -288,18 +501,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Quit Game"
 
-[node name="wysiwyg" type="CheckButton" parent="pause/Panel"]
-layout_mode = 0
-offset_left = 957.0
-offset_top = 13.0
-offset_right = 1099.0
-offset_bottom = 59.0
-tooltip_text = "What is see is what you get.
-
-If you hit someone on your screen they will take damage."
-disabled = true
-text = "WYSIWYG"
-
 [node name="cooldowns" type="Node" parent="."]
 
 [node name="slide cooldown" type="Timer" parent="cooldowns"]
@@ -323,7 +524,20 @@ libraries = {
 &"": SubResource("AnimationLibrary_ow0dq")
 }
 
+[node name="audio" type="Node" parent="."]
+
+[node name="shoot" type="AudioStreamPlayer" parent="audio"]
+stream = SubResource("AudioStreamRandomizer_bi5m7")
+volume_db = -10.0
+
+[node name="hit" type="AudioStreamPlayer" parent="audio"]
+stream = SubResource("AudioStreamRandomizer_psowp")
+pitch_scale = 1.33
+
+[node name="kill" type="AudioStreamPlayer" parent="audio"]
+stream = SubResource("AudioStreamRandomizer_45urx")
+volume_db = 10.0
+
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/quit" to="pause" method="_on_quit_pressed"]
-[connection signal="toggled" from="pause/Panel/wysiwyg" to="pause" method="_on_wysiwyg_toggled"]
