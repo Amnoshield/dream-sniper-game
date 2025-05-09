@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
+resource_local_to_scene = true
 radius = 0.45
 height = 1.8
 
