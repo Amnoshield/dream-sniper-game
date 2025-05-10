@@ -208,7 +208,7 @@ func if_land():
 
 func shoot():
 	if reload_ani.is_playing(): return
-	shoot_sfx.play()
+	play_shoot_sound.rpc()
 	
 	reload_ani.play("reload")
 	
@@ -268,3 +268,7 @@ func die():
 
 func update_health_display():
 	health_display.text = str(health)+"/"+str(MAX_HEALTH)+"❤️"
+
+@rpc("any_peer", "reliable", "call_local")
+func play_shoot_sound():
+	shoot_sfx.play()
