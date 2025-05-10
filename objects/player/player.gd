@@ -9,9 +9,10 @@ extends CharacterBody3D
 
 @export var hitscan:RayCast3D
 
+@export var wall_hit_effects:Node3D
+
 @export_subgroup("cooldowns")
 @export var slide_cooldown:Timer
-@export var shoot_cooldown:Timer
 
 @export_subgroup("UI")
 @export var UI:CanvasLayer
@@ -22,6 +23,10 @@ extends CharacterBody3D
 
 @export_subgroup("sync")
 @export var health = 100
+
+@export_subgroup("audio")
+@export var shoot_sfx:AudioStreamPlayer3D
+@export var kill_sfx:AudioStreamPlayer
 
 @onready var spawn_points = get_tree().get_nodes_in_group("PlayerSpawnPoint")
 
@@ -201,9 +206,8 @@ func if_land():
 		jump()
 
 func shoot():
-	if !shoot_cooldown.is_stopped(): return
-	shoot_cooldown.start()
-	$audio/shoot.play()
+	if reload_ani.is_playing(): return
+	shoot_sfx.play()
 	
 	reload_ani.play("reload")
 	
@@ -219,39 +223,25 @@ func shoot():
 	velocity += kb_angle*KB_IN
 	
 	hitscan.force_raycast_update()
-	var hit:Node = hitscan.get_collider()
+	var hit:Node3D = hitscan.get_collider()
 	if !hit:
-		print("Nothing but air! 🤣")
+		#print("Nothing but air! 🤣")
 		return
 	
 	if hit.is_in_group("players") and hit.visible:
-		print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
+		#print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
 		hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
 		if hit.health - DAMAGE_BODY < 0:
-			$audio/kill.play()
+			kill_sfx.play()
 			hit_ani.play("kill")
 		else:
 			hit_ani.play("hit")
-			#$audio/hit.play()
 	else:
 		print("Hit a wall")
-
-@rpc("any_peer", "reliable", "call_remote")
-func test_shot(pos:Vector3, roation:Vector3, dmg:int, kb:Vector3):
-	hitscan.global_position = pos
-	hitscan.global_rotation = roation
-	
-	hitscan.force_raycast_update()
-	var hit:Node = hitscan.get_collider()
-	if !hit:
-		print("They missed")
-		return
-	
-	if hit.is_in_group("players") and hit == self:
-		print("I got hit")
-		take_damage(dmg, kb)
-	else:
-		print("They missed")
+		#hitscan.get_collision_normal()
+		#hit_wall_sfx.global_position = hitscan.get_collision_point()
+		#hit_wall_sfx.play()
+		wall_hit_effects.activate.rpc(hitscan.get_collision_point(), hitscan.global_rotation)
 
 @rpc("any_peer", "reliable", "call_remote")
 func take_damage(damage:int, knockback:Vector3):
@@ -268,7 +258,7 @@ func die():
 	print("I died")
 	
 	visible = false
-	shoot_cooldown.stop()
+	reload_ani.stop()
 	
 	await get_tree().create_timer(2).timeout
 	

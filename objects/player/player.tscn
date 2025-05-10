@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=35 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
@@ -6,9 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://csgsy3h57kfh4" path="res://assets/ui/crosshair.png" id="3_m4kly"]
 [ext_resource type="Texture2D" uid="uid://b2dpqaajghmyw" path="res://assets/ui/reload 1.png" id="4_xgwla"]
 [ext_resource type="AudioStream" uid="uid://daf3au5j6dllm" path="res://assets/sfx/revovler-sound-328431.wav" id="5_ow0dq"]
-[ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="6_m4kly"]
-[ext_resource type="AudioStream" uid="uid://ccfxbm143ms2d" path="res://assets/sfx/hit.mp3" id="7_m4kly"]
 [ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
+[ext_resource type="AudioStream" uid="uid://dtbecff4sn4e1" path="res://assets/sfx/reload.wav" id="8_m4kly"]
+[ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
+[ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
 resource_local_to_scene = true
@@ -22,6 +23,22 @@ height = 1.8
 inner_radius = 0.02
 outer_radius = 0.4
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bi5m7"]
+random_pitch = 1.2
+random_volume_offset_db = 1.0
+streams_count = 1
+stream_0/stream = ExtResource("5_ow0dq")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_45urx"]
+streams_count = 1
+stream_0/stream = ExtResource("7_xgwla")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xgwla"]
+random_pitch = 1.2
+random_volume_offset_db = 1.0
+streams_count = 1
+stream_0/stream = ExtResource("8_m4kly")
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ykyjo"]
 radius = 0.45
 height = 1.7
@@ -31,7 +48,68 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../../crosshair/crosshair:modulate")
+tracks/0/path = NodePath("../../crosshair/TextureRect2:value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../Camera3D/audio/Reload:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_jnjyq"]
+resource_name = "reload"
+length = 1.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../crosshair/TextureRect2:value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 100.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../Camera3D/audio/Reload:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.333333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m4kly"]
+_data = {
+&"RESET": SubResource("Animation_ow0dq"),
+&"reload": SubResource("Animation_jnjyq")
+}
+
+[sub_resource type="Animation" id="Animation_bi5m7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -43,48 +121,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../../crosshair/TextureRect2:value")
+tracks/1/path = NodePath("../../crosshair2:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Color(1, 0, 0, 1)]
 }
-
-[sub_resource type="Animation" id="Animation_jnjyq"]
-resource_name = "reload"
-length = 1.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = false
-tracks/0/path = NodePath("../../crosshair/crosshair:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(6.49802, 1),
-"update": 0,
-"values": [Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../crosshair/TextureRect2:value")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 1.03333),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 100.0, 0.0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_m4kly"]
-_data = {
-&"RESET": SubResource("Animation_ow0dq"),
-&"reload": SubResource("Animation_jnjyq")
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../crosshair2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_xgwla"]
@@ -125,45 +181,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_bi5m7"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../crosshair2:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 0, 0, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../../crosshair2:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_psowp"]
@@ -253,7 +270,7 @@ properties/7/replication_mode = 2
 properties/8/path = NodePath(".:health")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath("audio/shoot:playing")
+properties/9/path = NodePath("Camera3D/audio/shoot:playing")
 properties/9/spawn = true
 properties/9/replication_mode = 2
 
@@ -318,25 +335,19 @@ _data = {
 &"hurt": SubResource("Animation_gnkmh")
 }
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bi5m7"]
-random_pitch = 1.2
-random_volume_offset_db = 1.0
-streams_count = 1
-stream_0/stream = ExtResource("5_ow0dq")
-
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_psowp"]
 random_pitch = 1.2
 random_volume_offset_db = 1.0
-streams_count = 2
-stream_0/stream = ExtResource("6_m4kly")
-stream_0/weight = 0.0
-stream_1/stream = ExtResource("7_m4kly")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_45urx"]
 streams_count = 1
-stream_0/stream = ExtResource("7_xgwla")
+stream_0/stream = ExtResource("9_xgwla")
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "slide_cooldown", "shoot_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani") groups=["players"]]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xgwla"]
+albedo_color = Color(0.289063, 0.137527, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_xgwla"]
+material = SubResource("StandardMaterial3D_xgwla")
+
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "wall_hit_effects", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
 process_mode = 1
 collision_layer = 2
 script = ExtResource("1_4vq5b")
@@ -347,13 +358,15 @@ standCheck = NodePath("stand check")
 multSync = NodePath("MultiplayerSynchronizer")
 ani = NodePath("AnimationPlayer")
 hitscan = NodePath("hitscan")
+wall_hit_effects = NodePath("wall hit effects")
 slide_cooldown = NodePath("cooldowns/slide cooldown")
-shoot_cooldown = NodePath("cooldowns/shoot cooldown")
 UI = NodePath("UI")
 pause = NodePath("pause")
 health_display = NodePath("UI/bottom/health")
 reload_ani = NodePath("UI/crosshair/crosshair/reload")
 hit_ani = NodePath("UI/crosshair/crosshair/hit")
+shoot_sfx = NodePath("Camera3D/audio/shoot")
+kill_sfx = NodePath("Camera3D/audio/kill")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_jgssh")
@@ -370,6 +383,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61934e-06, 0.00117853, -0.23178)
 mesh = SubResource("TorusMesh_jnjyq")
 
+[node name="audio" type="Node3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="shoot" type="AudioStreamPlayer3D" parent="Camera3D/audio"]
+stream = SubResource("AudioStreamRandomizer_bi5m7")
+volume_db = -32.0
+pitch_scale = 1.2
+
+[node name="kill" type="AudioStreamPlayer" parent="Camera3D/audio"]
+stream = SubResource("AudioStreamRandomizer_45urx")
+volume_db = 10.0
+
+[node name="Reload" type="AudioStreamPlayer" parent="Camera3D/audio"]
+stream = SubResource("AudioStreamRandomizer_xgwla")
+volume_db = -3.0
+
 [node name="stand check" type="ShapeCast3D" parent="."]
 shape = SubResource("CapsuleShape3D_ykyjo")
 target_position = Vector3(0, 0.05, 0)
@@ -380,7 +409,7 @@ target_position = Vector3(0, 0.05, 0)
 visible = false
 modulate = Color(1, 0, 0, 1)
 texture_filter = 1
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(30, 0)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -393,7 +422,7 @@ offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 rotation = 0.785398
-pivot_offset = Vector2(10, 10)
+pivot_offset = Vector2(15, 15)
 texture = ExtResource("3_m4kly")
 expand_mode = 5
 
@@ -433,6 +462,7 @@ offset_left = 35.0
 offset_top = 569.0
 offset_right = 1107.0
 offset_bottom = 609.0
+border_width = 3.0
 
 [node name="health" type="Label" parent="UI/bottom"]
 layout_mode = 0
@@ -510,14 +540,14 @@ text = "Quit Game"
 [node name="slide cooldown" type="Timer" parent="cooldowns"]
 one_shot = true
 
-[node name="shoot cooldown" type="Timer" parent="cooldowns"]
+[node name="shoot cooldown _deprecated" type="Timer" parent="cooldowns"]
+process_mode = 4
 one_shot = true
 
 [node name="hitscan" type="RayCast3D" parent="."]
 process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 enabled = false
-exclude_parent = false
 target_position = Vector3(0, 0, -400)
 collision_mask = 3
 hit_back_faces = false
@@ -528,19 +558,30 @@ libraries = {
 &"": SubResource("AnimationLibrary_ow0dq")
 }
 
-[node name="audio" type="Node3D" parent="."]
+[node name="wall hit effects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.95694)
+script = ExtResource("9_bi5m7")
 
-[node name="shoot" type="AudioStreamPlayer3D" parent="audio"]
-stream = SubResource("AudioStreamRandomizer_bi5m7")
-volume_db = -10.0
-
-[node name="hit" type="AudioStreamPlayer" parent="audio"]
+[node name="hit wall" type="AudioStreamPlayer3D" parent="wall hit effects"]
 stream = SubResource("AudioStreamRandomizer_psowp")
-pitch_scale = 1.33
-
-[node name="kill" type="AudioStreamPlayer" parent="audio"]
-stream = SubResource("AudioStreamRandomizer_45urx")
 volume_db = 10.0
+
+[node name="particles" type="CPUParticles3D" parent="wall hit effects"]
+emitting = false
+amount = 10
+one_shot = true
+explosiveness = 0.81
+randomness = 0.56
+lifetime_randomness = 0.19
+mesh = SubResource("QuadMesh_xgwla")
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 1)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+damping_max = 6.25
+scale_amount_min = 0.1
+scale_amount_max = 0.5
 
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]
