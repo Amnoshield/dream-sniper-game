@@ -10,6 +10,7 @@ extends CharacterBody3D
 @export var hitscan:RayCast3D
 
 @export var wall_hit_effects:Node3D
+@export var blood_particles:CPUParticles3D
 
 @export_subgroup("cooldowns")
 @export var slide_cooldown:Timer
@@ -224,12 +225,13 @@ func shoot():
 	
 	hitscan.force_raycast_update()
 	var hit:Node3D = hitscan.get_collider()
-	if !hit:
-		#print("Nothing but air! 🤣")
-		return
+	if !hit: return
 	
 	if hit.is_in_group("players") and hit.visible:
-		#print("Hit %s as "%hit.name + str(multiplayer.get_unique_id()))
+		blood_particles.global_position = hitscan.get_collision_point()
+		blood_particles.global_rotation = hitscan.global_rotation
+		blood_particles.emitting = true
+		
 		hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
 		if hit.health - DAMAGE_BODY < 0:
 			kill_sfx.play()
@@ -237,10 +239,6 @@ func shoot():
 		else:
 			hit_ani.play("hit")
 	else:
-		print("Hit a wall")
-		#hitscan.get_collision_normal()
-		#hit_wall_sfx.global_position = hitscan.get_collision_point()
-		#hit_wall_sfx.play()
 		wall_hit_effects.activate.rpc(hitscan.get_collision_point(), hitscan.global_rotation)
 
 @rpc("any_peer", "reliable", "call_remote")

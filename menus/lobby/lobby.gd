@@ -169,7 +169,7 @@ func check_name(username:String):
 	elif username.is_empty():
 		chat("[color=red]Username required[/color]")
 		return false
-	elif username.length() > 10:
+	elif username.length() > 15:
 		chat("[color=red]Username can't be longer than 10 characters[/color]")
 		return false
 	
