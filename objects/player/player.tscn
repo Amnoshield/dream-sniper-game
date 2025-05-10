@@ -273,6 +273,9 @@ properties/8/replication_mode = 2
 properties/9/path = NodePath("Camera3D/audio/shoot:playing")
 properties/9/spawn = true
 properties/9/replication_mode = 2
+properties/10/path = NodePath("Camera3D/audio/shoot:position")
+properties/10/spawn = false
+properties/10/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -399,8 +402,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="shoot" type="AudioStreamPlayer3D" parent="Camera3D/audio"]
 stream = SubResource("AudioStreamRandomizer_bi5m7")
+attenuation_model = 3
 volume_db = -32.0
 pitch_scale = 1.2
+area_mask = 0
 
 [node name="kill" type="AudioStreamPlayer" parent="Camera3D/audio"]
 stream = SubResource("AudioStreamRandomizer_45urx")

@@ -31,7 +31,7 @@ func player_left(id):
 			child.queue_free()
 
 func player_joined(id, _info):
-	MultiMaster._get_msg.rpc_id(id, "[color=yellow]Can't join in progress game.[/color]")
+	MultiMaster.get_msg.rpc_id(id, "[color=yellow]Can't join in progress game.[/color]")
 
 func back_to_menu():
 	get_tree().change_scene_to_file(lobbyPath)
