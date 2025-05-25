@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=38 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
 [ext_resource type="AudioStream" uid="uid://dtbecff4sn4e1" path="res://assets/sfx/reload.wav" id="8_m4kly"]
 [ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
+[ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="9_psowp"]
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
@@ -271,11 +272,8 @@ properties/8/path = NodePath(".:health")
 properties/8/spawn = true
 properties/8/replication_mode = 2
 properties/9/path = NodePath("Camera3D/audio/shoot:playing")
-properties/9/spawn = true
+properties/9/spawn = false
 properties/9/replication_mode = 2
-properties/10/path = NodePath("Camera3D/audio/shoot:position")
-properties/10/spawn = false
-properties/10/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -398,14 +396,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61934e-06, 0.00117853, -0.
 mesh = SubResource("TorusMesh_jnjyq")
 
 [node name="audio" type="Node3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0111654, -0.700243)
 
 [node name="shoot" type="AudioStreamPlayer3D" parent="Camera3D/audio"]
 stream = SubResource("AudioStreamRandomizer_bi5m7")
-attenuation_model = 3
-volume_db = -32.0
+volume_db = -28.0
 pitch_scale = 1.2
-area_mask = 0
 
 [node name="kill" type="AudioStreamPlayer" parent="Camera3D/audio"]
 stream = SubResource("AudioStreamRandomizer_45urx")
@@ -501,12 +498,12 @@ texture = SubResource("GradientTexture2D_gnkmh")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
 
-[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player")]
+[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "audio_slider")]
 process_mode = 2
 layer = 128
-visible = false
 script = ExtResource("3_jnjyq")
 player = NodePath("..")
+audio_slider = NodePath("Panel/VBoxContainer/audio slider")
 
 [node name="Panel" type="Panel" parent="pause"]
 anchors_preset = 15
@@ -538,6 +535,22 @@ layout_mode = 2
 text = "Back to Game"
 
 [node name="HSeparator" type="HSeparator" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="audio label" type="Label" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Master Audio"
+
+[node name="audio slider" type="HSlider" parent="pause/Panel/VBoxContainer"]
+layout_mode = 2
+min_value = -30.0
+max_value = 30.0
+ticks_on_borders = true
+
+[node name="HitSound" type="AudioStreamPlayer" parent="pause/Panel/VBoxContainer/audio slider"]
+stream = ExtResource("9_psowp")
+
+[node name="HSeparator3" type="HSeparator" parent="pause/Panel/VBoxContainer"]
 layout_mode = 2
 
 [node name="exit" type="Button" parent="pause/Panel/VBoxContainer"]
@@ -595,6 +608,7 @@ scale_amount_min = 0.05
 scale_amount_max = 0.2
 
 [node name="wall hit effects" type="Node3D" parent="."]
+process_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.95694)
 script = ExtResource("9_bi5m7")
 
@@ -621,5 +635,6 @@ scale_amount_min = 0.05
 scale_amount_max = 0.3
 
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
+[connection signal="value_changed" from="pause/Panel/VBoxContainer/audio slider" to="pause" method="_on_audio_value_changed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/exit" to="pause" method="_on_exit_pressed"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/quit" to="pause" method="_on_quit_pressed"]

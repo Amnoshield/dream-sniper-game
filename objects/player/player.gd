@@ -67,6 +67,7 @@ func _ready():
 	else:
 		cam.current = false
 		UI.hide()
+		shoot_sfx.volume_db = 0
 
 func _enter_tree() -> void:
 	multSync.set_multiplayer_authority(name.to_int())
