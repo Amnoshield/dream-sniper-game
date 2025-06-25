@@ -384,18 +384,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, -7)
 
 [node name="gear9" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -7)
+rotation_speed = -1.0
 
 [node name="gear10" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -5, 1, 16)
+rotation_speed = 2.0
 
 [node name="gear2" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, -7)
 
 [node name="gear3" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, 7)
+rotation_speed = -3.0
 
 [node name="gear4" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, 7)
+rotation_speed = 3.0
 
 [node name="gear5" parent="Node3D" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 10, 7)
