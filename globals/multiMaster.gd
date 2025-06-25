@@ -142,7 +142,7 @@ func _upnp_setup():
 		msg = "[color=yellow]UPNP Port Mapping Faiuled! Error %s[/color]\nRunning in LAN mode instead" % map_result
 		print(msg)
 		return msg
-	
+
 	msg = "[color=green]Success! Join Address: %s[/color]" % upnp.query_external_address()
 	print(msg)
 	return msg

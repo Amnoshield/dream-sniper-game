@@ -12,6 +12,13 @@ extends CharacterBody3D
 @export var wall_hit_effects:Node3D
 @export var blood_particles:CPUParticles3D
 
+
+@export_subgroup("gun stuff")
+@export var multiplayer_gun:Node3D
+@export var hud_gun:Node3D
+@export var gun_ani:AnimationPlayer
+@export var scoped_in := false
+
 @export_subgroup("cooldowns")
 @export var slide_cooldown:Timer
 
@@ -21,6 +28,7 @@ extends CharacterBody3D
 @export var health_display:Label
 @export var reload_ani:AnimationPlayer
 @export var hit_ani:AnimationPlayer
+
 
 @export_subgroup("sync")
 @export var health = 100
@@ -64,9 +72,11 @@ func _ready():
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
 		$Camera3D/eyes.visible = false
+		multiplayer_gun.hide()
 	else:
 		cam.current = false
 		UI.hide()
+		hud_gun.hide()
 		shoot_sfx.volume_db = 0
 
 func _enter_tree() -> void:
@@ -123,11 +133,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		shoot()
 	elif event.is_action("scope"):
 		if event.is_action_pressed("scope"):
-			cam.fov /= scope_mult
+			#cam.fov /= scope_mult
 			sense /= sense_scope_mult
+			gun_ani.play("scope in")
 		else:
-			cam.fov *= scope_mult
+			#cam.fov *= scope_mult
 			sense *= sense_scope_mult
+			gun_ani.play("scope out")
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
@@ -233,7 +245,10 @@ func shoot():
 		blood_particles.global_rotation = hitscan.global_rotation
 		blood_particles.emitting = true
 		
-		hit.take_damage.rpc_id(int(hit.name), DAMAGE_BODY, kb_angle*KB_OUT)
+		var damage = DAMAGE_BODY
+		if scoped_in: damage *= 2
+		
+		hit.take_damage.rpc_id(int(hit.name), damage, kb_angle*KB_OUT)
 		if hit.health - DAMAGE_BODY < 0:
 			kill_sfx.play()
 			hit_ani.play("kill")
@@ -254,8 +269,6 @@ func take_damage(damage:int, knockback:Vector3):
 	update_health_display()
 
 func die():
-	print("I died")
-	
 	visible = false
 	reload_ani.stop()
 	

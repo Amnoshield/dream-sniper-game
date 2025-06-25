@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=44 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
 [ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="9_psowp"]
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
+[ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
+[ext_resource type="PackedScene" uid="uid://bg30v3ox3hjxo" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp.glb" id="13_45rsp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
 resource_local_to_scene = true
@@ -39,6 +41,240 @@ random_pitch = 1.2
 random_volume_offset_db = 1.0
 streams_count = 1
 stream_0/stream = ExtResource("8_m4kly")
+
+[sub_resource type="Animation" id="Animation_c34wb"]
+resource_name = "scope in"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gun point 1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0.269935, -0.307247, -0.542471), Vector3(0, -0.227, -0.27)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0.377601, -0.312447, -0.579996), Vector3(0.238766, -0.211963, -0.849664)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.25789)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("..:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [75.0, 25.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_45rsp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gun point 1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.269935, -0.307247, -0.542471)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.377601, -0.312447, -0.579996)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("..:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [75.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ylcck"]
+resource_name = "scope out"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("gun point 1:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0, -0.227, -0.27), Vector3(0.269935, -0.307247, -0.542471)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0.238766, -0.211963, -0.849664), Vector3(0.377601, -0.312447, -0.579996)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0.25789), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("..:fov")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [25.0, 75.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ylcck"]
+_data = {
+&"RESET": SubResource("Animation_45rsp"),
+&"scope in": SubResource("Animation_c34wb"),
+&"scope out": SubResource("Animation_ylcck")
+}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ykyjo"]
 radius = 0.45
@@ -274,6 +510,9 @@ properties/8/replication_mode = 2
 properties/9/path = NodePath("Camera3D/audio/shoot:playing")
 properties/9/spawn = false
 properties/9/replication_mode = 2
+properties/10/path = NodePath("Camera3D/gun ani player:current_animation")
+properties/10/spawn = true
+properties/10/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -358,7 +597,7 @@ material = SubResource("StandardMaterial3D_bi5m7")
 radial_segments = 8
 rings = 4
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "wall_hit_effects", "blood_particles", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "wall_hit_effects", "blood_particles", "multiplayer_gun", "hud_gun", "gun_ani", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
 process_mode = 1
 collision_layer = 2
 script = ExtResource("1_4vq5b")
@@ -371,6 +610,9 @@ ani = NodePath("AnimationPlayer")
 hitscan = NodePath("hitscan")
 wall_hit_effects = NodePath("wall hit effects")
 blood_particles = NodePath("blood particles")
+multiplayer_gun = NodePath("Camera3D/multiplayer gun")
+hud_gun = NodePath("Camera3D/hud gun")
+gun_ani = NodePath("Camera3D/gun ani player")
 slide_cooldown = NodePath("cooldowns/slide cooldown")
 UI = NodePath("UI")
 pause = NodePath("pause")
@@ -411,6 +653,36 @@ volume_db = 10.0
 [node name="Reload" type="AudioStreamPlayer" parent="Camera3D/audio"]
 stream = SubResource("AudioStreamRandomizer_xgwla")
 volume_db = -3.0
+
+[node name="gun ani player" type="AnimationPlayer" parent="Camera3D"]
+root_node = NodePath("../hud gun")
+libraries = {
+&"": SubResource("AnimationLibrary_ylcck")
+}
+
+[node name="hud gun" type="Node3D" parent="Camera3D"]
+
+[node name="gun point 1" type="Node3D" parent="Camera3D/hud gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269935, -0.307247, -0.542471)
+
+[node name="gun point 2" type="Node3D" parent="Camera3D/hud gun/gun point 1"]
+
+[node name="gun point 3" type="Node3D" parent="Camera3D/hud gun/gun point 1/gun point 2"]
+
+[node name="awp" parent="Camera3D/hud gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("13_45rsp")]
+transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
+
+[node name="multiplayer gun" type="Node3D" parent="Camera3D"]
+
+[node name="gun point 1" type="Node3D" parent="Camera3D/multiplayer gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.377601, -0.312447, -0.579996)
+
+[node name="gun point 2" type="Node3D" parent="Camera3D/multiplayer gun/gun point 1"]
+
+[node name="gun point 3" type="Node3D" parent="Camera3D/multiplayer gun/gun point 1/gun point 2"]
+
+[node name="awp" parent="Camera3D/multiplayer gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("13_45rsp")]
+transform = Transform3D(-8.58046e-08, -0.383023, 1.96298, -1.67425e-08, 1.96298, 0.383023, -2, 0, -8.74228e-08, 0.17551, -0.0462931, -0.0107785)
 
 [node name="stand check" type="ShapeCast3D" parent="."]
 shape = SubResource("CapsuleShape3D_ykyjo")
@@ -633,6 +905,9 @@ initial_velocity_max = 10.0
 damping_max = 6.25
 scale_amount_min = 0.05
 scale_amount_max = 0.3
+
+[node name="bulletsniper" parent="." instance=ExtResource("12_c34wb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92875, 0, -11.3997)
 
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="value_changed" from="pause/Panel/VBoxContainer/audio slider" to="pause" method="_on_audio_value_changed"]
