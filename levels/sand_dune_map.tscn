@@ -1,0 +1,112 @@
+[gd_scene load_steps=11 format=3 uid="uid://ce4tb23q1gmht"]
+
+[ext_resource type="Script" uid="uid://rp21w552ak4h" path="res://levels/startLevel.gd" id="1_ei2hw"]
+[ext_resource type="PackedScene" uid="uid://b75miwdg2c4g5" path="res://objects/player/player.tscn" id="2_bl685"]
+[ext_resource type="Texture2D" uid="uid://c50hog54k1s0c" path="res://assets/models/textures/forest_leaves_02_diffuse_1k.png" id="2_e8pbf"]
+[ext_resource type="Texture2D" uid="uid://ce8e07ptfpste" path="res://assets/models/textures/forest_leaves_02_nor_gl_1k.png" id="3_bl685"]
+[ext_resource type="PackedScene" uid="uid://dmicdtaaugi72" path="res://assets/models/gear.tscn" id="5_bl685"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5x33h"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_hkccl"]
+sky_material = SubResource("ProceduralSkyMaterial_5x33h")
+
+[sub_resource type="Environment" id="Environment_h3y0o"]
+background_mode = 2
+sky = SubResource("Sky_hkccl")
+tonemap_mode = 2
+glow_enabled = true
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.772021, 0.601743, 0.423092, 1)
+volumetric_fog_length = 1024.0
+volumetric_fog_sky_affect = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efoui"]
+albedo_texture = ExtResource("2_e8pbf")
+normal_enabled = true
+normal_texture = ExtResource("3_bl685")
+uv1_scale = Vector3(0.155, 0.155, 0.155)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lkqv5"]
+
+[node name="sand_dune_map" type="Node3D" groups=["world root"]]
+script = ExtResource("1_ei2hw")
+playerScene = ExtResource("2_bl685")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h3y0o")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+visible = false
+shadow_enabled = true
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43549, -1, -1.1585)
+visible = false
+material_override = SubResource("StandardMaterial3D_efoui")
+use_collision = true
+size = Vector3(771, 1, 640)
+material = SubResource("StandardMaterial3D_lkqv5")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 34.284, 0)
+material_override = SubResource("StandardMaterial3D_efoui")
+use_collision = true
+size = Vector3(771, 1, 640)
+material = SubResource("StandardMaterial3D_lkqv5")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="CSGBox3D7"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.799239, 0.701467, 0.611132, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 10.429
+spot_range = 55.4289
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="CSGBox3D7"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.18557e-06, 50)
+light_color = Color(0.799239, 0.701467, 0.611132, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 10.429
+spot_range = 55.4289
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="CSGBox3D7"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -2.49155e-06, -57)
+light_color = Color(0.799239, 0.701467, 0.611132, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 10.429
+spot_range = 55.4289
+
+[node name="spawn points" type="Node3D" parent="."]
+
+[node name="Spawn 1" type="Node3D" parent="spawn points" groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.73211, 5.57593, 8.37069)
+
+[node name="Spawn 2" type="Node3D" parent="spawn points" groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.26789, 5.57593, 33.3707)
+
+[node name="Spawn 3" type="Node3D" parent="spawn points" groups=["PlayerSpawnPoint"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26789, 18.5759, 0.370689)
+
+[node name="gear" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
+
+[node name="gear6" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 12, 12)
+
+[node name="gear2" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 27.3771)
+
+[node name="gear4" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 27.3771)
+
+[node name="gear3" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, -27.6203)
+
+[node name="gear5" parent="." instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, -4, -3.49691e-07, 0, 3.49691e-07, -4, 0, 31, -27.6203)

@@ -1,23 +1,24 @@
-[gd_scene load_steps=14 format=3 uid="uid://c0i6jrmnpf8ee"]
+[gd_scene load_steps=15 format=3 uid="uid://c0i6jrmnpf8ee"]
 
 [ext_resource type="Script" uid="uid://rp21w552ak4h" path="res://levels/startLevel.gd" id="1_0lldd"]
 [ext_resource type="PackedScene" uid="uid://b75miwdg2c4g5" path="res://objects/player/player.tscn" id="1_4krm5"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="1_412ku"]
-[ext_resource type="Texture2D" uid="uid://c50hog54k1s0c" path="res://levels/textures/forest_leaves_02_diffuse_1k.png" id="3_yqpgv"]
-[ext_resource type="Material" uid="uid://lwdx5tmq41fr" path="res://levels/textures/brick.tres" id="4_hkccl"]
-[ext_resource type="Texture2D" uid="uid://ce8e07ptfpste" path="res://levels/textures/forest_leaves_02_nor_gl_1k.png" id="4_vub2e"]
-[ext_resource type="PackedScene" path="res://assets/skyscraper.tscn" id="7_vub2e"]
+[ext_resource type="Texture2D" uid="uid://c50hog54k1s0c" path="res://assets/models/textures/forest_leaves_02_diffuse_1k.png" id="3_yqpgv"]
+[ext_resource type="Material" uid="uid://lwdx5tmq41fr" path="res://assets/models/textures/brick.tres" id="4_hkccl"]
+[ext_resource type="Texture2D" uid="uid://ce8e07ptfpste" path="res://assets/models/textures/forest_leaves_02_nor_gl_1k.png" id="4_vub2e"]
+[ext_resource type="PackedScene" uid="uid://b5pcegn33gjmj" path="res://assets/models/skyscraper.tscn" id="7_vub2e"]
+[ext_resource type="PackedScene" uid="uid://dmicdtaaugi72" path="res://assets/models/gear.tscn" id="8_tqj0n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0lldd"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 
-[sub_resource type="Sky" id="Sky_hkccl"]
+[sub_resource type="Sky" id="Sky_tqj0n"]
 sky_material = SubResource("ProceduralSkyMaterial_0lldd")
 
 [sub_resource type="Environment" id="Environment_4qglm"]
 background_mode = 2
-sky = SubResource("Sky_hkccl")
+sky = SubResource("Sky_tqj0n")
 tonemap_mode = 2
 glow_enabled = true
 fog_sky_affect = 0.0
@@ -156,6 +157,13 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -22.07
 material_override = ExtResource("1_412ku")
 use_collision = true
 size = Vector3(2, 46.0974, 7.72607)
+material = SubResource("StandardMaterial3D_0lldd")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="ceiling"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 15.9267, 9.33068, -10.3906)
+material_override = ExtResource("1_412ku")
+use_collision = true
+size = Vector3(8, 45, 2)
 material = SubResource("StandardMaterial3D_0lldd")
 
 [node name="spawn points" type="Node3D" parent="."]
@@ -368,3 +376,35 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -297.1
 
 [node name="skyscraper36" parent="skyscrapers" instance=ExtResource("7_vub2e")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -180.151, -1.08769, -226.882)
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="gear" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, -7)
+
+[node name="gear9" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -7)
+
+[node name="gear10" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -5, 1, 16)
+
+[node name="gear2" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, -7)
+
+[node name="gear3" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, 7)
+
+[node name="gear4" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, 7)
+
+[node name="gear5" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 10, 7)
+
+[node name="gear6" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 17, 7)
+
+[node name="gear7" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 18, 7)
+
+[node name="gear8" parent="Node3D" instance=ExtResource("8_tqj0n")]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 25, 7)
