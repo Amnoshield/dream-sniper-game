@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvdawqf48mm2c"]
+[gd_scene load_steps=3 format=3 uid="uid://dvdawqf48mm2c"]
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
+[ext_resource type="JSON" uid="uid://2o7tnkaekuyd" path="res://menus/lobby/levels.tres" id="2_kssl2"]
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "start", "join", "host", "leave")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "start", "join", "host", "leave")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -11,13 +12,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l1s41")
-levelPath = "res://levels/Test.tscn"
+level_info = ExtResource("2_kssl2")
 joinCode = NodePath("control area/VBoxContainer/Lobby code")
 playerName = NodePath("control area/VBoxContainer/name")
 chat_box = NodePath("chat area/Chat")
 player_container = NodePath("player area/player container")
 player_template = NodePath("player area/player container/default")
 player_counter = NodePath("HBoxContainer/player counter/player tracker")
+level_select = NodePath("control area/VBoxContainer/select level")
 start = NodePath("control area/VBoxContainer/Start")
 join = NodePath("control area/VBoxContainer/Join")
 host = NodePath("control area/VBoxContainer/host")
@@ -46,6 +48,23 @@ grow_vertical = 2
 layout_mode = 2
 disabled = true
 text = "Start Game"
+
+[node name="Label" type="Label" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Current level:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="select level" type="OptionButton" parent="control area/VBoxContainer"]
+layout_mode = 2
+disabled = true
+flat = true
+alignment = 1
+item_count = 2
+popup/item_0/text = "test level"
+popup/item_0/id = 0
+popup/item_1/text = "Test two"
+popup/item_1/id = 1
 
 [node name="HSeparator" type="HSeparator" parent="control area/VBoxContainer"]
 layout_mode = 2
@@ -173,6 +192,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="control area/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="item_selected" from="control area/VBoxContainer/select level" to="." method="_on_select_level_item_selected"]
 [connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/leave" to="." method="_on_leave_pressed"]

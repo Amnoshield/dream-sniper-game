@@ -1,6 +1,7 @@
 extends Control
 
-@export var levelPath:String
+@export var level_info:JSON
+var current_level_idx := -1
 
 @export_category("UI")
 @export var joinCode:LineEdit
@@ -9,6 +10,7 @@ extends Control
 @export var player_container:FlowContainer
 @export var player_template:Label
 @export var player_counter:Label
+@export var level_select:OptionButton
 
 @export_category("Buttons")
 @export var start:Button
@@ -18,6 +20,8 @@ extends Control
 
 
 func _ready():
+	level_select_setup()
+	
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	joinCode.text = MultiMaster.last_server_ip
@@ -36,8 +40,12 @@ func _ready():
 	if MultiMaster.players.size() > 1 or (multiplayer.is_server() and MultiMaster.players.size()==1):
 		if multiplayer.is_server():
 			start.disabled = false
+			level_select.disabled = false
+			level_select.flat = false
 		else:
 			start.disabled = true
+			level_select.disabled = true
+			level_select.flat = true
 		leave.disabled = false
 		host.disabled = true
 		join.disabled = true
@@ -78,6 +86,8 @@ func _on_host_pressed() -> void:
 		host.disabled = true
 		join.disabled = true
 		playerName.editable = false
+		level_select.disabled = false
+		level_select.flat = false
 		
 		chat("%s" % error[1])
 		chat("[color=green]Started hosting.[/color]")
@@ -106,6 +116,7 @@ func _on_join_pressed() -> void:
 		joinCode.editable = false
 
 func _on_start_pressed() -> void:
+	var levelPath = level_select.get_item_metadata(current_level_idx)
 	MultiMaster.load_game.rpc(levelPath)
 
 func _on_quit_game_pressed() -> void:
@@ -126,6 +137,11 @@ func leave_lobby():
 	join.disabled = false
 	playerName.editable = true
 	joinCode.editable = true
+	
+	level_select.disabled = true
+	level_select.flat = true
+	level_select.select(-1)
+	
 	chat("Left lobby")
 	update_player_counter()
 
@@ -141,6 +157,9 @@ func player_joined(id, info):
 	player_container.add_child(new_player)
 	new_player.show()
 	update_player_counter()
+	
+	if id != multiplayer.get_unique_id() and multiplayer.is_server():
+		_update_selected_level.rpc_id(id, current_level_idx)
 
 func player_left(id):
 	if id == 1:
@@ -174,3 +193,23 @@ func check_name(username:String):
 		return false
 	
 	return username
+
+func level_select_setup():
+	level_select.clear()
+	
+	var counter := 0
+	for level in level_info.data:
+		level_select.add_item(level.name)
+		level_select.set_item_metadata(counter, level.path)
+		counter+= 1
+	
+	level_select.select(-1)
+
+func _on_select_level_item_selected(index: int) -> void:
+	if !multiplayer.is_server(): return
+	current_level_idx = index
+	_update_selected_level.rpc(index)
+
+@rpc("call_remote", "reliable")
+func _update_selected_level(level_select_idx):
+	level_select.select(level_select_idx)
