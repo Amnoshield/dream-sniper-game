@@ -3,12 +3,16 @@ extends CanvasLayer
 @export var player:CharacterBody3D
 @export var lobbyPath:String = "res://menus/lobby/lobby.tscn"
 @export var audio_slider:HSlider
+@export var sense:SpinBox
 
 var master_bus = AudioServer.get_bus_index("Master")
+var sense_mult = 5000
 
 func _ready():
 	visible = false
 	audio_slider.value = AudioServer.get_bus_volume_db(master_bus)
+	sense.set_value_no_signal(player.sense * sense_mult)
+	
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if player.multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
@@ -51,3 +55,9 @@ func _on_audio_value_changed(value: float) -> void:
 		AudioServer.set_bus_mute(master_bus, true)
 	else:
 		AudioServer.set_bus_mute(master_bus, false)
+
+
+func _on_sense_value_changed(value: float) -> void:
+	audio_slider.get_child(0).play()
+	
+	player.sense = value/sense_mult

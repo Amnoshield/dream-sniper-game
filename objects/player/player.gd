@@ -45,7 +45,7 @@ var uncrouch = false
 var airborn = false
 
 var sense := 0.002
-var scope_mult := 3
+#var scope_mult := 3
 var sense_scope_mult := 3
 
 #consts
