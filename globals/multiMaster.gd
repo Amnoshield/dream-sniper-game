@@ -60,32 +60,11 @@ func on_noray_connected():
 	noray_connected.emit()
 
 
-#func join_game(address = ""):
-	#if address.is_empty():
-		#address = DEFAULT_SERVER_IP
-	#var peer = ENetMultiplayerPeer.new()
-	#var error = peer.create_client(address, PORT)
-	#if error:
-		#return error
-	#
-	#multiplayer.multiplayer_peer = peer
-
 func join(oid):
 	Noray.connect_nat(oid)
 	external_oid = oid
 
 
-#func create_game():
-	#var peer = ENetMultiplayerPeer.new()
-	#var error = peer.create_server(PORT, MAX_CONNECTIONS)
-	#if error:
-		#return [-1, error]
-	#multiplayer.multiplayer_peer = peer
-	#player_info["id"] = 1
-	#players[1] = player_info
-	#player_connected.emit(1, player_info)
-	#
-	#return [0, _upnp_setup()]
 func host():
 	print("Hosting")
 	
@@ -98,6 +77,7 @@ func host():
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 
+
 func handle_nat_connection(address, port):
 	var err = await connect_to_server(address, port)
 	
@@ -108,8 +88,10 @@ func handle_nat_connection(address, port):
 	
 	return err
 
+
 func handle_relay_connection(address, port):
 	return await connect_to_server(address, port)
+
 
 func connect_to_server(address, port):
 	var err = OK
