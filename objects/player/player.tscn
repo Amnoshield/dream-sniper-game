@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=45 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://csgsy3h57kfh4" path="res://assets/ui/crosshair.png" id="3_m4kly"]
 [ext_resource type="Texture2D" uid="uid://b2dpqaajghmyw" path="res://assets/ui/reload 1.png" id="4_xgwla"]
 [ext_resource type="AudioStream" uid="uid://daf3au5j6dllm" path="res://assets/sfx/revovler-sound-328431.wav" id="5_ow0dq"]
+[ext_resource type="PackedScene" uid="uid://b5v8ymcsd166f" path="res://assets/models/awp.tscn" id="7_45rsp"]
 [ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
 [ext_resource type="AudioStream" uid="uid://dtbecff4sn4e1" path="res://assets/sfx/reload.wav" id="8_m4kly"]
 [ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
@@ -671,6 +672,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269935, -0.307247, -0.54247
 
 [node name="awp" parent="Camera3D/hud gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("13_45rsp")]
 transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
+
+[node name="awp2" parent="Camera3D/hud gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("7_45rsp")]
+transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
+visible = false
 
 [node name="multiplayer gun" type="Node3D" parent="Camera3D"]
 

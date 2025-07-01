@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ce4tb23q1gmht"]
+[gd_scene load_steps=12 format=3 uid="uid://ce4tb23q1gmht"]
 
 [ext_resource type="Script" uid="uid://rp21w552ak4h" path="res://levels/startLevel.gd" id="1_ei2hw"]
 [ext_resource type="PackedScene" uid="uid://b75miwdg2c4g5" path="res://objects/player/player.tscn" id="2_bl685"]
 [ext_resource type="Texture2D" uid="uid://c50hog54k1s0c" path="res://assets/models/textures/forest_leaves_02_diffuse_1k.png" id="2_e8pbf"]
 [ext_resource type="Texture2D" uid="uid://ce8e07ptfpste" path="res://assets/models/textures/forest_leaves_02_nor_gl_1k.png" id="3_bl685"]
 [ext_resource type="PackedScene" uid="uid://dmicdtaaugi72" path="res://assets/models/gear.tscn" id="5_bl685"]
+[ext_resource type="MeshLibrary" uid="uid://x40jucs5e3mu" path="res://assets/models/pipes/pipe_library.tres" id="6_5x33h"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5x33h"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -21,9 +22,9 @@ glow_enabled = true
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
-volumetric_fog_albedo = Color(0.772021, 0.601743, 0.423092, 1)
+volumetric_fog_emission = Color(0.10006, 0.0238273, 0, 1)
+volumetric_fog_anisotropy = 0.45
 volumetric_fog_length = 1024.0
-volumetric_fog_sky_affect = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efoui"]
 albedo_texture = ExtResource("2_e8pbf")
@@ -54,33 +55,26 @@ use_collision = true
 size = Vector3(771, 1, 640)
 material = SubResource("StandardMaterial3D_lkqv5")
 
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 66.284, 0)
+light_energy = 16.0
+light_volumetric_fog_energy = 2.994
+spot_range = 121.0
+spot_angle = 44.9929
+
 [node name="CSGBox3D7" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 34.284, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 222.284, 0)
 material_override = SubResource("StandardMaterial3D_efoui")
 use_collision = true
 size = Vector3(771, 1, 640)
 material = SubResource("StandardMaterial3D_lkqv5")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="CSGBox3D7"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_color = Color(0.799239, 0.701467, 0.611132, 1)
-light_energy = 16.0
-light_volumetric_fog_energy = 10.429
-spot_range = 55.4289
-
-[node name="SpotLight3D2" type="SpotLight3D" parent="CSGBox3D7"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.18557e-06, 50)
-light_color = Color(0.799239, 0.701467, 0.611132, 1)
-light_energy = 16.0
-light_volumetric_fog_energy = 10.429
-spot_range = 55.4289
-
-[node name="SpotLight3D3" type="SpotLight3D" parent="CSGBox3D7"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -2.49155e-06, -57)
-light_color = Color(0.799239, 0.701467, 0.611132, 1)
-light_energy = 16.0
-light_volumetric_fog_energy = 10.429
-spot_range = 55.4289
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 222.284, 0)
+material_override = SubResource("StandardMaterial3D_efoui")
+use_collision = true
+size = Vector3(771, 1, 640)
+material = SubResource("StandardMaterial3D_lkqv5")
 
 [node name="spawn points" type="Node3D" parent="."]
 
@@ -99,14 +93,238 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
 [node name="gear6" parent="." instance=ExtResource("5_bl685")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 12, 12)
 
-[node name="gear2" parent="." instance=ExtResource("5_bl685")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 27.3771)
+[node name="pillar" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 27.505)
 
-[node name="gear4" parent="." instance=ExtResource("5_bl685")]
-transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 27.3771)
+[node name="gear2" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
 
-[node name="gear3" parent="." instance=ExtResource("5_bl685")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, -27.6203)
+[node name="gear4" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 0)
 
-[node name="gear5" parent="." instance=ExtResource("5_bl685")]
-transform = Transform3D(4, 0, 0, 0, -4, -3.49691e-07, 0, 3.49691e-07, -4, 0, 31, -27.6203)
+[node name="gear7" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 35, 0)
+
+[node name="gear8" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 64, 0)
+
+[node name="gear19" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 67, 0)
+
+[node name="gear20" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 96, 0)
+
+[node name="gear11" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -62, 0)
+
+[node name="gear12" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, -33, 0)
+
+[node name="gear15" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -29, 0)
+
+[node name="gear16" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 0, 0)
+
+[node name="gear9" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 99, 0)
+
+[node name="gear10" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 128, 0)
+
+[node name="gear21" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 131, 0)
+
+[node name="gear22" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 160, 0)
+
+[node name="gear13" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 163, 0)
+
+[node name="gear14" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 192, 0)
+
+[node name="gear23" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 195, 0)
+
+[node name="gear24" parent="pillar" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 224, 0)
+
+[node name="pillar2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27.495)
+
+[node name="gear2" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
+
+[node name="gear4" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 0)
+
+[node name="gear7" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 35, 0)
+
+[node name="gear8" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 64, 0)
+
+[node name="gear19" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 67, 0)
+
+[node name="gear20" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 96, 0)
+
+[node name="gear11" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -62, 0)
+
+[node name="gear12" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, -33, 0)
+
+[node name="gear15" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -29, 0)
+
+[node name="gear16" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 0, 0)
+
+[node name="gear9" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 99, 0)
+
+[node name="gear10" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 128, 0)
+
+[node name="gear21" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 131, 0)
+
+[node name="gear22" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 160, 0)
+
+[node name="gear13" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 163, 0)
+
+[node name="gear14" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 192, 0)
+
+[node name="gear23" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 195, 0)
+
+[node name="gear24" parent="pillar2" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 224, 0)
+
+[node name="pillar3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.3761, 0, 0.0124655)
+
+[node name="gear2" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
+
+[node name="gear4" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 0)
+
+[node name="gear7" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 35, 0)
+
+[node name="gear8" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 64, 0)
+
+[node name="gear19" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 67, 0)
+
+[node name="gear20" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 96, 0)
+
+[node name="gear9" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 99, 0)
+
+[node name="gear10" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 128, 0)
+
+[node name="gear21" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 131, 0)
+
+[node name="gear22" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 160, 0)
+
+[node name="gear11" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -62, 0)
+
+[node name="gear12" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, -33, 0)
+
+[node name="gear15" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -29, 0)
+
+[node name="gear16" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 0, 0)
+
+[node name="gear13" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 163, 0)
+
+[node name="gear14" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 192, 0)
+
+[node name="gear23" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 195, 0)
+
+[node name="gear24" parent="pillar3" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 224, 0)
+
+[node name="pillar4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6239, 0, 0.0124655)
+
+[node name="gear2" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 2, 0)
+
+[node name="gear4" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 31, 0)
+
+[node name="gear7" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 35, 0)
+
+[node name="gear8" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 64, 0)
+
+[node name="gear19" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 67, 0)
+
+[node name="gear20" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 96, 0)
+
+[node name="gear11" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -62, 0)
+
+[node name="gear12" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, -33, 0)
+
+[node name="gear15" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -29, 0)
+
+[node name="gear16" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 0, 0)
+
+[node name="gear9" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 99, 0)
+
+[node name="gear10" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 128, 0)
+
+[node name="gear21" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 131, 0)
+
+[node name="gear22" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 160, 0)
+
+[node name="gear13" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 163, 0)
+
+[node name="gear14" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 192, 0)
+
+[node name="gear23" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 195, 0)
+
+[node name="gear24" parent="pillar4" instance=ExtResource("5_bl685")]
+transform = Transform3D(-4, 3.49691e-07, 0, -3.49691e-07, -4, 0, 0, 0, 4, 0, 224, 0)
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("6_5x33h")
+cell_size = Vector3(4, 4, 4)
+data = {
+"cells": PackedInt32Array(196609, 65530, 1245188, 196608, 65530, 1245188, 262143, 65530, 1245188, 196610, 65530, 1245187, 196610, 65531, 786436, 196610, 65532, 786436, 196610, 65533, 786436, 196610, 65534, 1376259, 196609, 65534, 393219, 262143, 65533, 131075, 196608, 65533, 1114116, 196609, 65533, 1245187, 262142, 65532, 1245188, 262141, 65532, 1245188, 262140, 65532, 1245188, 262139, 65532, 196612, 262138, 65532, 393219, 262138, 65531, 393220, 262138, 65530, 393220, 262138, 65529, 917507, 262139, 65529, 1245187, 262141, 65530, 196611, 262140, 65530, 196612, 262139, 65530, 393219, 65531, 65530, 3, 65530, 65530, 1376260, 65529, 65530, 720899, 131065, 65530, 655364, 196601, 65530, 655364, 262137, 65530, 655364, 327673, 65530, 655364, 393209, 65530, 655363, 393210, 65530, 589828, 393211, 65530, 589828, 393212, 65530, 589828, 393213, 65530, 589827, 327677, 65530, 1310724, 327679, 65533, 1310724, 393215, 65533, 1310724, 458751, 65533, 1310724, 524287, 65533, 1310724, 589823, 65533, 1310724, 655359, 65533, 1310724, 720895, 65533, 1310724, 786431, 65533, 1441795, 786431, 65532, 1114115, 720896, 65532, 1114116, 720897, 65532, 1114116, 720898, 65532, 1245187, 720898, 65533, 1507331, 720899, 65533, 65540, 720900, 65533, 3, 655364, 65533, 1310723, 655364, 65532, 327684, 655364, 65531, 327684, 655364, 65530, 327684, 655364, 65529, 917507, 655365, 65529, 589828, 655366, 65529, 589827, 589830, 65529, 524292, 524294, 65529, 524292, 458758, 65529, 524292, 393222, 65529, 524292, 327686, 65529, 524292, 262150, 65529, 524292, 196614, 65529, 524292, 131078, 65529, 524292, 65542, 65529, 524292, 6, 65529, 524292, -65530, 65529, 524292, -131066, 65529, 524292, -196602, 65529, 524292, -262138, 65529, 524292, -327674, 65529, 524291, -327675, 65529, 1507332, -327676, 65529, 65539, -393212, 65529, 655364, -458748, 65529, 655364, -524284, 65529, 655364, -589820, 65529, 655364, -655356, 65529, 655364, -720892, 65529, 524291, -720893, 65529, 720900, -720894, 65529, 720900, -720895, 65529, 1507331, -720895, 65528, 786436, -720895, 65527, 786435, -720896, 65527, 65540, -655361, 65527, 65540, -655362, 65527, 1114115, -655362, 65528, 983044, -655362, 65529, 983044, -655362, 65530, 1441795, -720898, 65530, 1179652, -786434, 65530, 1179652, -851970, 65530, 1179652, -917506, 65530, 1179651, -917506, 65531, 786436, -917506, 65532, 262147, -917507, 65532, 65539, -983043, 65532, 1310724, -1048579, 65532, 1310724, 262143, 65532, 589827, 196607, 65532, 196611, 196606, 65532, 196612, 196605, 65532, 65539, 131069, 65532, 1310724, 65533, 65532, 1310724, -3, 65532, 1310724, -5, 65530, 1310724, -65541, 65530, 983043, -65539, 65532, 196611, -65540, 65532, 196612, -65541, 65531, 393220, -65541, 65532, 393219, 262142, 65530, 1507331, 262142, 65529, 983043, 327678, 65529, 1441795, 327678, 65528, 458756, 327678, 65527, 1114115, 327679, 65527, 1114116, 262144, 65527, 1114116, 262145, 65527, 786435, 262145, 65528, 786436, 262145, 65529, 786436, 262145, 65530, 1376259, 262144, 65530, 131075, 327680, 65530, 655364, 393216, 65530, 1048579, 393216, 65531, 393220, 393216, 65532, 393220, 393216, 65533, 393219, 393217, 65533, 196611, 458753, 65533, 131076, 524289, 65533, 1179652, 589825, 65533, 1179652, 655361, 65533, 1179652, 720897, 65533, 1179652, 786433, 65533, 327683, 786433, 65532, 327684, 786433, 65531, 327684, 786433, 65530, 327684, 786433, 65529, 327684, 786433, 65528, 327684, 786433, 65527, 786435, 786432, 65527, 1376260, 851967, 65527, 1376260, 851966, 65527, 917507, 851966, 65528, 917508, 851966, 65529, 1310723, 917502, 65529, 1310724, 983038, 65529, 589827, 983037, 65529, 589828, 983036, 65529, 589828, 983035, 65529, 720899, 1048571, 65529, 1310724, 1114107, 65529, 1310724, 1179643, 65529, 327683, 1179643, 65528, 327684, 1179643, 65527, 327684, 1179643, 65526, 327684, 1179643, 65525, 327684, 1179643, 65524, 327684, 1179643, 65523, 327684, 1179643, 65522, 327684, 1179643, 65521, 327684, 1179643, 65520, 327684, 1179643, 65519, 327684, 1179643, 65518, 327684, 1179643, 65517, 327684, 1179643, 65516, 327684, 1179643, 65515, 327684, 1179643, 65514, 327684, 1179643, 65513, 327684, 1179643, 65512, 327684, 1179643, 65511, 327684, 786435, 2, 327684, 786435, 3, 327684, 786435, 4, 327683, 720899, 4, 983043, 720899, 5, 983044, 720899, 6, 1507331, 720900, 6, 1507332, 720901, 6, 589827, 655365, 6, 1179652)
+}
+metadata/_editor_floor_ = Vector3(0, 10, 0)
