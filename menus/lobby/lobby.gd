@@ -116,6 +116,10 @@ func _on_join_pressed() -> void:
 		joinCode.editable = false
 
 func _on_start_pressed() -> void:
+	if current_level_idx == -1:
+		chat("[color=red]No Level Selected[/color]")
+		return
+	
 	var levelPath = level_select.get_item_metadata(current_level_idx)
 	MultiMaster.load_game.rpc(levelPath)
 
@@ -141,6 +145,7 @@ func leave_lobby():
 	level_select.disabled = true
 	level_select.flat = true
 	level_select.select(-1)
+	current_level_idx = -1
 	
 	chat("Left lobby")
 	update_player_counter()
