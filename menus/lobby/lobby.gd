@@ -76,44 +76,39 @@ func _on_host_pressed() -> void:
 	await get_tree().create_timer(0.01).timeout
 	playerName.text.strip_edges()
 	MultiMaster.player_info["name"] = playerName.text+"⭐"
-	var error = MultiMaster.create_game()
-	if error[0] == -1:
-		chat("[color=red]Error starting host: %s.[/color]" % error[1])
-		return
-	else:
-		start.disabled = false
-		leave.disabled = false
-		host.disabled = true
-		join.disabled = true
-		playerName.editable = false
-		level_select.disabled = false
-		level_select.flat = false
-		
-		chat("%s" % error[1])
-		chat("[color=green]Started hosting.[/color]")
+	MultiMaster.host()
+	
+	start.disabled = false
+	leave.disabled = false
+	host.disabled = true
+	join.disabled = true
+	playerName.editable = false
+	level_select.disabled = false
+	level_select.flat = false
+	
+	chat("Lobby code: %s" % Noray.oid)
+	chat("[color=green]Started hosting.[/color]")
 
 func _on_join_pressed() -> void:
 	var username = check_name(playerName.text)
 	if !username:
 		return
 	
-	if !joinCode.text.is_empty() and !joinCode.text.is_valid_ip_address():
-		chat("[color=red]invald ip address[/color]")
+	if joinCode.text.is_empty():
+		chat("[color=red]Lobby code required[/color]")
 		return
 	
 	MultiMaster.last_server_ip = joinCode.text
-	var error = MultiMaster.join_game(joinCode.text)
-	if error:
-		chat("[color=red]Problem joining lobby. Error %s[/color]" % error)
-	else:
-		chat("Joining lobby, this may take a minute ...")
-		MultiMaster.player_info["name"] = playerName.text
-		start.disabled = true
-		leave.disabled = false
-		host.disabled = true
-		join.disabled = true
-		playerName.editable = false
-		joinCode.editable = false
+	MultiMaster.join(joinCode.text)
+	
+	chat("Joining lobby, this may take a minute ...")
+	MultiMaster.player_info["name"] = playerName.text
+	start.disabled = true
+	leave.disabled = false
+	host.disabled = true
+	join.disabled = true
+	playerName.editable = false
+	joinCode.editable = false
 
 func _on_start_pressed() -> void:
 	if current_level_idx == -1:

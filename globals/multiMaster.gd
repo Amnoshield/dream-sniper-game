@@ -8,11 +8,15 @@ signal player_disconnected(peer_id)
 signal server_disconnected
 signal kicked(msg)
 signal msg_received(msg)
+signal noray_connected
 
-const PORT = 8000
-const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
+var noray_address := "tomfol.io" # if this doesn't work use "104.237.145.37"
+var noray_port := 8890
 const MAX_CONNECTIONS = 20-1 # subtract 1 because the host doesn't count
 var last_server_ip = ""
+
+var external_oid = ""
+var is_host = false
 
 # This will contain player info for every player,
 # with the keys being each player's unique IDs.
@@ -27,41 +31,123 @@ var player_info:Dictionary = {"name": ""}
 
 var players_loaded = 0
 
+
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-
-
-func join_game(address = ""):
-	if address.is_empty():
-		address = DEFAULT_SERVER_IP
-	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_client(address, PORT)
-	if error:
-		return error
 	
-	multiplayer.multiplayer_peer = peer
+	Noray.on_connect_to_host.connect(on_noray_connected)
+	Noray.on_connect_nat.connect(handle_nat_connection)
+	Noray.on_connect_relay.connect(handle_relay_connection)
+	
+	Noray.connect_to_host(noray_address, noray_port)
 
 
-func create_game():
+func change_noray_server(address:String, port:int):
+	Noray.disconnect_from_host()
+	Noray.connect_to_host(address, port)
+
+
+func on_noray_connected():
+	print("Connected to Noray server")
+	
+	Noray.register_host()
+	await Noray.on_pid
+	await Noray.register_remote()
+	noray_connected.emit()
+
+
+#func join_game(address = ""):
+	#if address.is_empty():
+		#address = DEFAULT_SERVER_IP
+	#var peer = ENetMultiplayerPeer.new()
+	#var error = peer.create_client(address, PORT)
+	#if error:
+		#return error
+	#
+	#multiplayer.multiplayer_peer = peer
+
+func join(oid):
+	Noray.connect_nat(oid)
+	external_oid = oid
+
+
+#func create_game():
+	#var peer = ENetMultiplayerPeer.new()
+	#var error = peer.create_server(PORT, MAX_CONNECTIONS)
+	#if error:
+		#return [-1, error]
+	#multiplayer.multiplayer_peer = peer
+	#player_info["id"] = 1
+	#players[1] = player_info
+	#player_connected.emit(1, player_info)
+	#
+	#return [0, _upnp_setup()]
+func host():
+	print("Hosting")
+	
 	var peer = ENetMultiplayerPeer.new()
-	var error = peer.create_server(PORT, MAX_CONNECTIONS)
-	if error:
-		return [-1, error]
+	peer.create_server(Noray.local_port, MAX_CONNECTIONS)
 	multiplayer.multiplayer_peer = peer
+	is_host = true
+	
 	player_info["id"] = 1
 	players[1] = player_info
 	player_connected.emit(1, player_info)
+
+func handle_nat_connection(address, port):
+	var err = await connect_to_server(address, port)
 	
-	return [0, _upnp_setup()]
+	if err != OK && !is_host:
+		print("NAT failed, using relay")
+		Noray.connect_relay(external_oid)
+		err = OK
+	
+	return err
+
+func handle_relay_connection(address, port):
+	return await connect_to_server(address, port)
+
+func connect_to_server(address, port):
+	var err = OK
+	
+	if !is_host:
+		var udp = PacketPeerUDP.new()
+		udp.bind(Noray.local_port)
+		udp.set_dest_address(address, port)
+		
+		err = await PacketHandshake.over_packet_peer(udp)
+		udp.close()
+		
+		if err != OK:
+			if err != ERR_BUSY:
+				print("Handshake failed")
+				return err
+		else:
+			print("Handshake success")
+		
+		var peer = ENetMultiplayerPeer.new()
+		err = peer.create_client(address, port, 0, 0, 0, Noray.local_port)
+		
+		if err != OK:
+			return err
+		
+		multiplayer.multiplayer_peer = peer
+		
+		return OK
+	else:
+		err = await PacketHandshake.over_enet(multiplayer.multiplayer_peer.host, address, port)
+	
+	return err
 
 
 func remove_multiplayer_peer():
 	multiplayer.multiplayer_peer = null
 	players.clear()
+	is_host = false
 
 
 # When the server decides to start the game from a UI scene,
@@ -120,32 +206,6 @@ func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	server_disconnected.emit()
-
-
-func _upnp_setup():
-	var msg
-	
-	var upnp = UPNP.new()
-	var discover_result = upnp.discover()
-	if discover_result != UPNP.UPNP_RESULT_SUCCESS:
-		msg = "[color=yellow]UPNP Discover Failed! Error %s[/color]\nRunning in LAN mode instead" % discover_result
-		print(msg)
-		return msg
-	
-	if !(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
-		msg = "[color=yellow]UPNP Invalid Gateway[/color]\nRunning in LAN mode instead"
-		print(msg)
-		return msg
-	
-	var map_result = upnp.add_port_mapping(PORT)
-	if map_result != UPNP.UPNP_RESULT_SUCCESS:
-		msg = "[color=yellow]UPNP Port Mapping Faiuled! Error %s[/color]\nRunning in LAN mode instead" % map_result
-		print(msg)
-		return msg
-
-	msg = "[color=green]Success! Join Address: %s[/color]" % upnp.query_external_address()
-	print(msg)
-	return msg
 
 
 @rpc("any_peer", "reliable")
