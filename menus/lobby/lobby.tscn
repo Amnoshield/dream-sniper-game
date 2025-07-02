@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://dvdawqf48mm2c"]
+[gd_scene load_steps=5 format=3 uid="uid://dvdawqf48mm2c"]
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
 [ext_resource type="JSON" uid="uid://2o7tnkaekuyd" path="res://menus/lobby/levels.tres" id="2_kssl2"]
+[ext_resource type="Script" uid="uid://bffylmt1a6anw" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "start", "join", "host", "leave")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv8s3"]
+bg_color = Color(0.6, 0.6, 0.6, 0.784314)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "color_picker", "start", "join", "host", "leave")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -16,10 +24,11 @@ level_info = ExtResource("2_kssl2")
 joinCode = NodePath("control area/VBoxContainer/Lobby code")
 playerName = NodePath("control area/VBoxContainer/name")
 chat_box = NodePath("chat area/Chat")
-player_container = NodePath("player area/player container")
-player_template = NodePath("player area/player container/default")
-player_counter = NodePath("HBoxContainer/player counter/player tracker")
+player_container = NodePath("players display/player area/player container")
+player_template = NodePath("players display/player area/player container/default")
+player_counter = NodePath("players display/HBoxContainer/player counter/player tracker")
 level_select = NodePath("control area/VBoxContainer/select level")
+color_picker = NodePath("control area/VBoxContainer/color picker")
 start = NodePath("control area/VBoxContainer/Start")
 join = NodePath("control area/VBoxContainer/Join")
 host = NodePath("control area/VBoxContainer/host")
@@ -27,9 +36,9 @@ leave = NodePath("control area/VBoxContainer/leave")
 
 [node name="control area" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 66.2
-offset_top = 83.0
-offset_right = 248.2
+offset_left = 66.0
+offset_top = 29.0
+offset_right = 248.0
 offset_bottom = 554.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="control area"]
@@ -75,13 +84,25 @@ placeholder_text = "Username"
 alignment = 1
 max_length = 15
 
+[node name="color" type="Label" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Color:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="color picker" type="ColorPickerButton" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Pick color"
+color = Color(0.0370463, 0.934474, 0.912123, 1)
+edit_alpha = false
+
 [node name="Join" type="Button" parent="control area/VBoxContainer"]
 layout_mode = 2
 text = "Join Lobby"
 
 [node name="Lobby code" type="LineEdit" parent="control area/VBoxContainer"]
 layout_mode = 2
-placeholder_text = "ip address Here"
+placeholder_text = "Lobby code here"
 alignment = 1
 emoji_menu_enabled = false
 clear_button_enabled = true
@@ -108,7 +129,7 @@ text = "Quit Game"
 [node name="chat area" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 883.0
-offset_top = 86.0
+offset_top = 70.0
 offset_right = 1091.0
 offset_bottom = 555.0
 
@@ -128,23 +149,53 @@ bbcode_enabled = true
 scroll_following = true
 selection_enabled = true
 
-[node name="UPNP warning" type="Label" parent="."]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 63.0
-text = "THIS USES UNIVERSAL PLUG AND PLAY TO HOST  (UPNP).
- If you do not have it enabled or can't enable it have someone else host."
+[node name="players display" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 308.0
+offset_top = 37.0
+offset_right = 838.0
+offset_bottom = 545.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="players display"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="players" type="Label" parent="players display/HBoxContainer"]
+custom_minimum_size = Vector2(422, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Players"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="player area" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 326.0
-offset_top = 120.0
-offset_right = 812.0
-offset_bottom = 547.0
+[node name="player counter" type="Panel" parent="players display/HBoxContainer"]
+custom_minimum_size = Vector2(57.055, 0)
+layout_mode = 2
 
-[node name="player container" type="FlowContainer" parent="player area"]
+[node name="player tracker" type="Label" parent="players display/HBoxContainer/player counter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1/21"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="player area" type="Panel" parent="players display"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 37.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="player container" type="FlowContainer" parent="players display/player area"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -157,43 +208,73 @@ grow_horizontal = 2
 grow_vertical = 2
 vertical = true
 
-[node name="default" type="Label" parent="player area/player container"]
+[node name="default" type="Label" parent="players display/player area/player container"]
 visible = false
 layout_mode = 2
 text = "Default Name"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="settings" type="Button" parent="."]
 layout_mode = 0
-offset_left = 328.0
-offset_top = 87.0
-offset_right = 811.0
-offset_bottom = 112.0
+offset_left = 1010.0
+offset_top = 32.0
+offset_right = 1080.0
+offset_bottom = 63.0
+text = "Settings"
+script = ExtResource("3_lv8s3")
 
-[node name="players" type="Label" parent="HBoxContainer"]
-custom_minimum_size = Vector2(422, 0)
-layout_mode = 2
-text = "Players"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Panel" type="Panel" parent="settings"]
+visible = false
+top_level = true
+layout_mode = 0
+offset_left = 157.0
+offset_top = 57.0
+offset_right = 967.0
+offset_bottom = 543.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_lv8s3")
 
-[node name="player counter" type="Panel" parent="HBoxContainer"]
-custom_minimum_size = Vector2(57.055, 0)
-layout_mode = 2
+[node name="settings" type="Label" parent="settings/Panel"]
+layout_mode = 0
+offset_left = 356.0
+offset_top = 27.0
+offset_right = 418.0
+offset_bottom = 50.0
+text = "Settings"
 
-[node name="player tracker" type="Label" parent="HBoxContainer/player counter"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "1/21"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="close" type="Button" parent="settings/Panel"]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 73.0
+offset_right = 446.0
+offset_bottom = 114.0
+text = "Close"
+
+[node name="noray address" type="LineEdit" parent="settings/Panel"]
+layout_mode = 0
+offset_left = 197.0
+offset_top = 133.0
+offset_right = 420.0
+offset_bottom = 168.0
+placeholder_text = "Noray server address here"
+expand_to_text_length = true
+emoji_menu_enabled = false
+
+[node name="noray port" type="LineEdit" parent="settings/Panel"]
+layout_mode = 0
+offset_left = 434.0
+offset_top = 132.0
+offset_right = 576.0
+offset_bottom = 167.0
+placeholder_text = "Noray port here"
+emoji_menu_enabled = false
 
 [connection signal="pressed" from="control area/VBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="item_selected" from="control area/VBoxContainer/select level" to="." method="_on_select_level_item_selected"]
+[connection signal="popup_closed" from="control area/VBoxContainer/color picker" to="." method="_on_color_picker_popup_closed"]
 [connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/leave" to="." method="_on_leave_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/quit game" to="." method="_on_quit_game_pressed"]
+[connection signal="pressed" from="settings" to="settings" method="_on_pressed"]
+[connection signal="pressed" from="settings/Panel/close" to="settings" method="_on_button_pressed"]
+[connection signal="text_submitted" from="settings/Panel/noray address" to="settings" method="_on_noray_address_text_submitted"]
+[connection signal="text_submitted" from="settings/Panel/noray port" to="settings" method="_on_noray_port_text_submitted"]

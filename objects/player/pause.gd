@@ -37,7 +37,7 @@ func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 func _on_exit_pressed() -> void:
-	if multiplayer.is_server():
+	if MultiMaster.is_host:
 		MultiMaster.load_game.rpc(lobbyPath)
 	else:
 		#MultiMaster.remove_multiplayer_peer()

@@ -1,24 +1,39 @@
-[gd_scene load_steps=45 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=54 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
-[ext_resource type="Material" uid="uid://q0m36n8xutf7" path="res://assets/demoMaterial.tres" id="2_jnjyq"]
+[ext_resource type="Shader" uid="uid://lufvqmigheht" path="res://assets/baseShader.gdshader" id="2_45rsp"]
 [ext_resource type="Script" uid="uid://t6xpggwig2h3" path="res://objects/player/pause.gd" id="3_jnjyq"]
 [ext_resource type="Texture2D" uid="uid://csgsy3h57kfh4" path="res://assets/ui/crosshair.png" id="3_m4kly"]
+[ext_resource type="Texture2D" uid="uid://coigk2dmyv5ot" path="res://assets/texture_12.png" id="3_ylcck"]
 [ext_resource type="Texture2D" uid="uid://b2dpqaajghmyw" path="res://assets/ui/reload 1.png" id="4_xgwla"]
 [ext_resource type="AudioStream" uid="uid://daf3au5j6dllm" path="res://assets/sfx/revovler-sound-328431.wav" id="5_ow0dq"]
-[ext_resource type="PackedScene" uid="uid://b5v8ymcsd166f" path="res://assets/models/awp.tscn" id="7_45rsp"]
 [ext_resource type="AudioStream" uid="uid://dinca30238fn7" path="res://assets/sfx/killsound.wav" id="7_xgwla"]
 [ext_resource type="AudioStream" uid="uid://dtbecff4sn4e1" path="res://assets/sfx/reload.wav" id="8_m4kly"]
 [ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
 [ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="9_psowp"]
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
 [ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
+[ext_resource type="Script" uid="uid://c6ho7c1htyp3c" path="res://objects/player/bullet_trail.gd" id="12_ylcck"]
 [ext_resource type="PackedScene" uid="uid://bg30v3ox3hjxo" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp.glb" id="13_45rsp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
 resource_local_to_scene = true
 radius = 0.45
 height = 1.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x5bgp"]
+render_priority = 0
+shader = ExtResource("2_45rsp")
+shader_parameter/texture_albedo = ExtResource("3_ylcck")
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/clearcoat = 0.0
+shader_parameter/clearcoat_roughness = 0.0
+shader_parameter/uv1_blend_sharpness = 0.1
+shader_parameter/uv1_scale = Vector3(0.5, 0.5, 0.5)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xkryw"]
 height = 1.8
@@ -497,7 +512,7 @@ properties/4/path = NodePath("MeshInstance3D:scale")
 properties/4/spawn = true
 properties/4/replication_mode = 2
 properties/5/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
-properties/5/spawn = true
+properties/5/spawn = false
 properties/5/replication_mode = 2
 properties/6/path = NodePath("Camera3D:position")
 properties/6/spawn = true
@@ -512,8 +527,72 @@ properties/9/path = NodePath("Camera3D/audio/shoot:playing")
 properties/9/spawn = false
 properties/9/replication_mode = 2
 properties/10/path = NodePath("Camera3D/gun ani player:current_animation")
-properties/10/spawn = true
+properties/10/spawn = false
 properties/10/replication_mode = 2
+
+[sub_resource type="Gradient" id="Gradient_45rsp"]
+offsets = PackedFloat32Array(0, 0.494382, 0.842697)
+colors = PackedColorArray(1, 0.0326903, 0, 1, 1, 1, 1, 0.658824, 0.275974, 0.275974, 0.275974, 0.423529)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ylcck"]
+gradient = SubResource("Gradient_45rsp")
+fill_from = Vector2(0, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x5bgp"]
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_ylcck")
+uv1_scale = Vector3(1, 1.98, 1)
+uv1_offset = Vector3(0, 0.01, 0)
+disable_receive_shadows = true
+grow = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_45rsp"]
+material = SubResource("StandardMaterial3D_x5bgp")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 1.0
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="Animation" id="Animation_x5bgp"]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.25, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_dthqj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:transparency")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dthqj"]
+_data = {
+&"RESET": SubResource("Animation_dthqj"),
+&"fade": SubResource("Animation_x5bgp")
+}
 
 [sub_resource type="Animation" id="Animation_xkryw"]
 length = 0.001
@@ -547,15 +626,15 @@ resource_name = "hurt"
 length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Color(0.694118, 0, 0.203922, 1), Color(0.416, 0.502, 0.663, 1)]
+"values": [Color(0.694118, 0, 0.203922, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -568,6 +647,23 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(4.92458, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"inverse_albedo"
+}, {
+"args": [],
+"method": &"reset_albedo"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ow0dq"]
@@ -598,7 +694,7 @@ material = SubResource("StandardMaterial3D_bi5m7")
 radial_segments = 8
 rings = 4
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "ani", "hitscan", "wall_hit_effects", "blood_particles", "multiplayer_gun", "hud_gun", "gun_ani", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "hurt_ani", "hurt_mesh", "hitscan", "wall_hit_effects", "blood_particles", "multiplayer_gun", "hud_gun", "gun_ani", "bullet_trail", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
 process_mode = 1
 collision_layer = 2
 script = ExtResource("1_4vq5b")
@@ -607,13 +703,15 @@ collision = NodePath("CollisionShape3D")
 squash = NodePath("MeshInstance3D")
 standCheck = NodePath("stand check")
 multSync = NodePath("MultiplayerSynchronizer")
-ani = NodePath("AnimationPlayer")
+hurt_ani = NodePath("hurt")
+hurt_mesh = NodePath("MeshInstance3D")
 hitscan = NodePath("hitscan")
 wall_hit_effects = NodePath("wall hit effects")
 blood_particles = NodePath("blood particles")
 multiplayer_gun = NodePath("Camera3D/multiplayer gun")
 hud_gun = NodePath("Camera3D/hud gun")
 gun_ani = NodePath("Camera3D/gun ani player")
+bullet_trail = NodePath("hitscan/bullet trail")
 slide_cooldown = NodePath("cooldowns/slide cooldown")
 UI = NodePath("UI")
 pause = NodePath("pause")
@@ -627,7 +725,7 @@ kill_sfx = NodePath("Camera3D/audio/kill")
 shape = SubResource("CapsuleShape3D_jgssh")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = ExtResource("2_jnjyq")
+material_override = SubResource("ShaderMaterial_x5bgp")
 instance_shader_parameters/albedo = Color(0.416, 0.502, 0.663, 1)
 mesh = SubResource("CapsuleMesh_xkryw")
 
@@ -672,10 +770,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269935, -0.307247, -0.54247
 
 [node name="awp" parent="Camera3D/hud gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("13_45rsp")]
 transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
-
-[node name="awp2" parent="Camera3D/hud gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("7_45rsp")]
-transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
-visible = false
 
 [node name="multiplayer gun" type="Node3D" parent="Camera3D"]
 
@@ -860,10 +954,6 @@ text = "Quit Game"
 [node name="slide cooldown" type="Timer" parent="cooldowns"]
 one_shot = true
 
-[node name="shoot cooldown _deprecated" type="Timer" parent="cooldowns"]
-process_mode = 4
-one_shot = true
-
 [node name="hitscan" type="RayCast3D" parent="."]
 process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -872,7 +962,19 @@ target_position = Vector3(0, 0, -400)
 collision_mask = 3
 hit_back_faces = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="bullet trail" type="MeshInstance3D" parent="hitscan"]
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.160823, -1.24082)
+top_level = true
+mesh = SubResource("CylinderMesh_45rsp")
+script = ExtResource("12_ylcck")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="hitscan/bullet trail"]
+libraries = {
+&"": SubResource("AnimationLibrary_dthqj")
+}
+
+[node name="hurt" type="AnimationPlayer" parent="."]
 process_mode = 3
 libraries = {
 &"": SubResource("AnimationLibrary_ow0dq")
