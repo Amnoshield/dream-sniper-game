@@ -251,10 +251,10 @@ func shoot():
 		dir = dir.rotated(Vector3(1,0,0), hitscan.global_rotation.x)
 		dir = dir.rotated(Vector3(0,1,0), hitscan.global_rotation.y)
 		dir = dir.rotated(Vector3(0,0,1), hitscan.global_rotation.z)
-		bullet_trail.start.rpc(cam.global_position-dir*1000, cam.global_position)
+		bullet_trail.start.rpc(cam.global_position-dir*1000, cam.global_position, hitscan.global_rotation)
 		return
 	
-	bullet_trail.start.rpc(hitscan.get_collision_point(), cam.global_position)
+	bullet_trail.start.rpc(hitscan.get_collision_point(), cam.global_position, hitscan.global_rotation)
 	
 	if hit.is_in_group("players") and hit.visible:
 		blood_particles.global_position = hitscan.get_collision_point()
