@@ -82,7 +82,7 @@ layout_mode = 2
 layout_mode = 2
 placeholder_text = "Username"
 alignment = 1
-max_length = 15
+max_length = 10
 
 [node name="color" type="Label" parent="control area/VBoxContainer"]
 layout_mode = 2

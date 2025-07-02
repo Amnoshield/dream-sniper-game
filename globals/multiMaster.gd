@@ -11,6 +11,8 @@ signal kicked(msg)
 signal msg_received(msg)
 signal noray_connected
 
+signal death(killer_id:int, victim_id:int)
+
 
 const default_noray_address := "tomfol.io"
 const default_noray_port := 8890
@@ -211,3 +213,7 @@ func get_kicked(msg:String):
 @rpc("any_peer", "reliable")
 func get_msg(msg:String):
 	msg_received.emit(msg)
+
+@rpc("any_peer", "call_local", "reliable")
+func add_death_to_scoreboard(killer_id:int, victim_id:int):
+	death.emit(killer_id, victim_id)

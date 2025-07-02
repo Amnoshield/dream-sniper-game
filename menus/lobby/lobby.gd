@@ -156,7 +156,7 @@ func chat(text:String):
 
 func player_joined(id, info):
 	print("Player joined")
-	chat("Player %s joined" % info.name + ", id %s"%id)
+	chat("Player %s joined" % info.name)
 	var new_player:Label = player_template.duplicate()
 	new_player.name = str(id)
 	new_player.text = info.name
@@ -195,7 +195,7 @@ func check_name(username:String):
 	elif username.is_empty():
 		chat("[color=red]Username required[/color]")
 		return false
-	elif username.length() > 15:
+	elif username.length() > 10:
 		chat("[color=red]Username can't be longer than 10 characters[/color]")
 		return false
 	
@@ -240,5 +240,11 @@ func _on_player_info_update(id:int, info):
 
 func _on_color_picker_popup_closed() -> void:
 	MultiMaster.player_info.color = color_picker.color
+	#print(to_hex(color_picker.color))
 	if MultiMaster.players.size() > 0:
 		MultiMaster.update_player_info.rpc(MultiMaster.player_info)
+
+#func to_hex(color:Color):
+	#var full_hex:String = "%x"% color.to_rgba32()
+	#var fixed_hex = ("%6s"% full_hex.trim_suffix("ff")).replace(" ", "0")
+	#return fixed_hex

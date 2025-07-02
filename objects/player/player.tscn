@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=56 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Shader" uid="uid://lufvqmigheht" path="res://assets/baseShader.gdshader" id="2_45rsp"]
@@ -13,8 +13,10 @@
 [ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="9_psowp"]
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
 [ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
+[ext_resource type="Script" uid="uid://c26vre7rn1bcx" path="res://objects/player/scoreboard.gd" id="12_x5bgp"]
 [ext_resource type="Script" uid="uid://c6ho7c1htyp3c" path="res://objects/player/bullet_trail.gd" id="12_ylcck"]
 [ext_resource type="PackedScene" uid="uid://bg30v3ox3hjxo" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp.glb" id="13_45rsp"]
+[ext_resource type="FontFile" uid="uid://hqoxkwtqkd7" path="res://assets/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf" id="13_dthqj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
 resource_local_to_scene = true
@@ -694,7 +696,7 @@ material = SubResource("StandardMaterial3D_bi5m7")
 radial_segments = 8
 rings = 4
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "hurt_ani", "hurt_mesh", "hitscan", "wall_hit_effects", "blood_particles", "multiplayer_gun", "hud_gun", "gun_ani", "bullet_trail", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "shoot_sfx", "kill_sfx") groups=["players"]]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("cam", "collision", "squash", "standCheck", "multSync", "hurt_ani", "hurt_mesh", "hitscan", "wall_hit_effects", "blood_particles", "multiplayer_gun", "hud_gun", "gun_ani", "bullet_trail", "slide_cooldown", "UI", "pause", "health_display", "reload_ani", "hit_ani", "scoreboard", "shoot_sfx", "kill_sfx") groups=["players"]]
 process_mode = 1
 collision_layer = 2
 script = ExtResource("1_4vq5b")
@@ -718,6 +720,7 @@ pause = NodePath("pause")
 health_display = NodePath("UI/bottom/health")
 reload_ani = NodePath("UI/crosshair/crosshair/reload")
 hit_ani = NodePath("UI/crosshair/crosshair/hit")
+scoreboard = NodePath("scoreboard")
 shoot_sfx = NodePath("Camera3D/audio/shoot")
 kill_sfx = NodePath("Camera3D/audio/kill")
 
@@ -872,6 +875,7 @@ replication_config = SubResource("SceneReplicationConfig_g7ett")
 [node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "audio_slider", "sense")]
 process_mode = 2
 layer = 128
+visible = false
 script = ExtResource("3_jnjyq")
 player = NodePath("..")
 audio_slider = NodePath("Panel/VBoxContainer/audio slider")
@@ -948,6 +952,36 @@ layout_mode = 2
 [node name="quit" type="Button" parent="pause/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Quit Game"
+
+[node name="scoreboard" type="CanvasLayer" parent="." node_paths=PackedStringArray("text_label")]
+script = ExtResource("12_x5bgp")
+text_label = NodePath("Panel/RichTextLabel")
+
+[node name="Panel" type="Panel" parent="scoreboard"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 348.0
+offset_top = 29.0
+offset_right = -348.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="scoreboard/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("13_dthqj")
+bbcode_enabled = true
+text = "tasdfasdfasdfasdfasdf"
+scroll_active = false
+horizontal_alignment = 1
 
 [node name="cooldowns" type="Node" parent="."]
 

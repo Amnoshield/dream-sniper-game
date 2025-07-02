@@ -30,6 +30,7 @@ extends CharacterBody3D
 @export var health_display:Label
 @export var reload_ani:AnimationPlayer
 @export var hit_ani:AnimationPlayer
+@export var scoreboard:CanvasLayer
 
 
 @export_subgroup("sync")
@@ -40,6 +41,7 @@ extends CharacterBody3D
 @export var kill_sfx:AudioStreamPlayer
 
 @onready var spawn_points = get_tree().get_nodes_in_group("PlayerSpawnPoint")
+
 
 var walking = false
 var crouching = false
@@ -135,7 +137,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * sense)
 		cam.rotate_x(-event.relative.y * sense)
-		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-75), deg_to_rad(75))
+		cam.rotation.x = clamp(cam.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 	elif event.is_action_pressed("shoot"):
 		if !visible:return
 		shoot()
@@ -167,8 +169,15 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("jump"):
 		if is_on_floor():
 			jump()
+	
 	elif event.is_action_pressed("pause"):
 		pause.pause()
+	
+	elif event.is_action("scoreboard"):
+		if event.is_action_pressed("scoreboard"):
+			scoreboard.show_scores()
+		elif event.is_action_released("scoreboard"):
+			scoreboard.hide_scores()
 
 func start_crouch():
 	if crouching: return
@@ -264,7 +273,7 @@ func shoot():
 		var damage = DAMAGE_BODY
 		if scoped_in: damage *= 2
 		
-		hit.take_damage.rpc(damage, kb_angle*KB_OUT)
+		hit.take_damage.rpc(damage, kb_angle*KB_OUT, int(hit.name))
 		if hit.health < 0:
 			kill_sfx.play()
 			hit_ani.play("kill")
@@ -274,14 +283,15 @@ func shoot():
 		wall_hit_effects.activate.rpc(hitscan.get_collision_point(), hitscan.global_rotation)
 
 @rpc("any_peer", "reliable", "call_local")
-func take_damage(damage:int, knockback:Vector3):
+func take_damage(damage:int, knockback:Vector3, target_id:int):
+	hurt_ani.play("hurt")
+	if multiplayer.get_unique_id() != target_id: return
+	
 	health -= damage
 	velocity += knockback
 	
-	hurt_ani.play("hurt")
-	
 	if health <= 0:
-		die()
+		die(multiplayer.get_remote_sender_id())
 	update_health_display()
 
 func inverse_albedo():
@@ -291,9 +301,11 @@ func inverse_albedo():
 func reset_albedo():
 	hurt_mesh.set_instance_shader_parameter("albedo", default_albedo)
 
-func die():
+func die(killer_id:int):
 	visible = false
 	reload_ani.stop()
+	MultiMaster.add_death_to_scoreboard.rpc(killer_id, multiplayer.get_unique_id())
+	#scoreboard.add_kill.rpc(killer_id, multiplayer.get_unique_id())
 	
 	await get_tree().create_timer(2).timeout
 	
