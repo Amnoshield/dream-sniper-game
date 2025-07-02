@@ -9,7 +9,7 @@ extends Node3D
 func _ready() -> void:
 	MultiMaster.player_disconnected.connect(player_left)
 	MultiMaster.server_disconnected.connect(back_to_menu)
-	if multiplayer.is_server():
+	if MultiMaster.is_host:
 		MultiMaster.player_connected.connect(player_joined)
 	
 	for player in MultiMaster.players:

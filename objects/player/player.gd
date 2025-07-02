@@ -5,7 +5,8 @@ extends CharacterBody3D
 @export var squash:Node3D
 @export var standCheck:ShapeCast3D
 @export var multSync:MultiplayerSynchronizer
-@export var ani:AnimationPlayer
+@export var hurt_ani:AnimationPlayer
+@export var hurt_mesh:Node3D
 
 @export var hitscan:RayCast3D
 
@@ -18,6 +19,7 @@ extends CharacterBody3D
 @export var hud_gun:Node3D
 @export var gun_ani:AnimationPlayer
 @export var scoped_in := false
+@export var bullet_trail:MeshInstance3D
 
 @export_subgroup("cooldowns")
 @export var slide_cooldown:Timer
@@ -64,10 +66,16 @@ const KB_OUT = 0
 const KB_IN = 10
 const MAX_HEALTH = 100
 
+var default_albedo:Color
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	multSync.set_multiplayer_authority(name.to_int())
+	default_albedo = MultiMaster.players[name.to_int()].color
+
+	$MeshInstance3D.set_instance_shader_parameter("albedo", default_albedo)
+	
 	
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
@@ -77,13 +85,13 @@ func _ready():
 		cam.current = false
 		UI.hide()
 		hud_gun.hide()
-		shoot_sfx.volume_db = 0
+		shoot_sfx.volume_db = -10 #default is -28
 
 func _enter_tree() -> void:
 	multSync.set_multiplayer_authority(name.to_int())
 
 func _physics_process(delta: float) -> void:
-	if !multiplayer.is_server():
+	if !MultiMaster.is_host:
 		pass
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
 	if_land()
@@ -135,11 +143,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed("scope"):
 			#cam.fov /= scope_mult
 			sense /= sense_scope_mult
-			gun_ani.play("scope in")
+			trigger_gun_ani.rpc(true)
 		else:
 			#cam.fov *= scope_mult
 			sense *= sense_scope_mult
-			gun_ani.play("scope out")
+			trigger_gun_ani.rpc(false)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if multSync.get_multiplayer_authority() != multiplayer.get_unique_id(): return
@@ -238,7 +246,15 @@ func shoot():
 	
 	hitscan.force_raycast_update()
 	var hit:Node3D = hitscan.get_collider()
-	if !hit: return
+	if !hit:
+		var dir = Vector3(0,0,1)
+		dir = dir.rotated(Vector3(1,0,0), hitscan.global_rotation.x)
+		dir = dir.rotated(Vector3(0,1,0), hitscan.global_rotation.y)
+		dir = dir.rotated(Vector3(0,0,1), hitscan.global_rotation.z)
+		bullet_trail.start.rpc(cam.global_position-dir*1000, cam.global_position)
+		return
+	
+	bullet_trail.start.rpc(hitscan.get_collision_point(), cam.global_position)
 	
 	if hit.is_in_group("players") and hit.visible:
 		blood_particles.global_position = hitscan.get_collision_point()
@@ -248,8 +264,8 @@ func shoot():
 		var damage = DAMAGE_BODY
 		if scoped_in: damage *= 2
 		
-		hit.take_damage.rpc_id(int(hit.name), damage, kb_angle*KB_OUT)
-		if hit.health - DAMAGE_BODY < 0:
+		hit.take_damage.rpc(damage, kb_angle*KB_OUT)
+		if hit.health < 0:
 			kill_sfx.play()
 			hit_ani.play("kill")
 		else:
@@ -257,16 +273,23 @@ func shoot():
 	else:
 		wall_hit_effects.activate.rpc(hitscan.get_collision_point(), hitscan.global_rotation)
 
-@rpc("any_peer", "reliable", "call_remote")
+@rpc("any_peer", "reliable", "call_local")
 func take_damage(damage:int, knockback:Vector3):
 	health -= damage
 	velocity += knockback
 	
-	ani.play("hurt")
+	hurt_ani.play("hurt")
 	
 	if health <= 0:
 		die()
 	update_health_display()
+
+func inverse_albedo():
+	var albedo = Color(1+(-1)* default_albedo.r, 1+(-1)*default_albedo.g, 1+(-1)*default_albedo.b)
+	hurt_mesh.set_instance_shader_parameter("albedo", albedo)
+
+func reset_albedo():
+	hurt_mesh.set_instance_shader_parameter("albedo", default_albedo)
 
 func die():
 	visible = false
@@ -286,3 +309,10 @@ func update_health_display():
 @rpc("any_peer", "reliable", "call_local")
 func play_shoot_sound():
 	shoot_sfx.play()
+
+@rpc("any_peer", "reliable", "call_local")
+func trigger_gun_ani(scope_in:bool):
+	if scope_in:
+		gun_ani.play("scope in")
+	else:
+		gun_ani.play("scope out")

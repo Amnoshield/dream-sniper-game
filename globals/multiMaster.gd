@@ -5,11 +5,15 @@ extends Node
 # These signals can be connected to by a UI lobby scene or the game scene.
 signal player_connected(peer_id, player_info)
 signal player_disconnected(peer_id)
+signal player_info_updated(id, player_info)
 signal server_disconnected
 signal kicked(msg)
 signal msg_received(msg)
 signal noray_connected
 
+
+const default_noray_address := "tomfol.io"
+const default_noray_port := 8890
 var noray_address := "tomfol.io" # if this doesn't work use "104.237.145.37"
 var noray_port := 8890
 const MAX_CONNECTIONS = 20-1 # subtract 1 because the host doesn't count
@@ -27,7 +31,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info:Dictionary = {"name": ""}
+@onready var player_info:Dictionary = {"name": "", "color":Color(randf(),randf(),randf())}
 
 var players_loaded = 0
 
@@ -142,7 +146,7 @@ func load_game(game_scene_path):
 # Every peer will call this when they have loaded the game scene.
 @rpc("any_peer", "call_local", "reliable")
 func player_loaded():
-	if multiplayer.is_server():
+	if is_host:
 		players_loaded += 1
 		print("Players loaded: ", players_loaded, " / ", players.size())
 		if players_loaded == players.size():
@@ -163,6 +167,12 @@ func _register_player(new_player_info):
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
 	player_connected.emit(new_player_id, new_player_info)
+
+@rpc("any_peer", "call_local", "reliable")
+func update_player_info(new_player_info:Dictionary):
+	var player_id = multiplayer.get_remote_sender_id()
+	players[player_id] = new_player_info
+	player_info_updated.emit(player_id, new_player_info)
 
 
 func _on_player_disconnected(id):

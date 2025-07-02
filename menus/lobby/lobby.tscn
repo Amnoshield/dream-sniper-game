@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
 [ext_resource type="JSON" uid="uid://2o7tnkaekuyd" path="res://menus/lobby/levels.tres" id="2_kssl2"]
-[ext_resource type="Script" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
+[ext_resource type="Script" uid="uid://bffylmt1a6anw" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv8s3"]
 bg_color = Color(0.6, 0.6, 0.6, 0.784314)
@@ -11,7 +11,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "start", "join", "host", "leave")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "color_picker", "start", "join", "host", "leave")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -28,6 +28,7 @@ player_container = NodePath("players display/player area/player container")
 player_template = NodePath("players display/player area/player container/default")
 player_counter = NodePath("players display/HBoxContainer/player counter/player tracker")
 level_select = NodePath("control area/VBoxContainer/select level")
+color_picker = NodePath("control area/VBoxContainer/color picker")
 start = NodePath("control area/VBoxContainer/Start")
 join = NodePath("control area/VBoxContainer/Join")
 host = NodePath("control area/VBoxContainer/host")
@@ -82,6 +83,18 @@ layout_mode = 2
 placeholder_text = "Username"
 alignment = 1
 max_length = 15
+
+[node name="color" type="Label" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Color:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="color picker" type="ColorPickerButton" parent="control area/VBoxContainer"]
+layout_mode = 2
+text = "Pick color"
+color = Color(0.0370463, 0.934474, 0.912123, 1)
+edit_alpha = false
 
 [node name="Join" type="Button" parent="control area/VBoxContainer"]
 layout_mode = 2
@@ -256,6 +269,7 @@ emoji_menu_enabled = false
 
 [connection signal="pressed" from="control area/VBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="item_selected" from="control area/VBoxContainer/select level" to="." method="_on_select_level_item_selected"]
+[connection signal="popup_closed" from="control area/VBoxContainer/color picker" to="." method="_on_color_picker_popup_closed"]
 [connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/leave" to="." method="_on_leave_pressed"]

@@ -11,6 +11,7 @@ var current_level_idx := -1
 @export var player_template:Label
 @export var player_counter:Label
 @export var level_select:OptionButton
+@export var color_picker:ColorPickerButton
 
 @export_category("Buttons")
 @export var start:Button
@@ -22,23 +23,28 @@ var current_level_idx := -1
 func _ready():
 	level_select_setup()
 	
+	color_picker.color = MultiMaster.player_info.color
+	
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	joinCode.text = MultiMaster.last_server_ip
 	
 	MultiMaster.player_connected.connect(player_joined)
 	MultiMaster.player_disconnected.connect(player_left)
+	MultiMaster.player_info_updated.connect(_on_player_info_update)
 	MultiMaster.kicked.connect(kicked)
 	MultiMaster.msg_received.connect(chat)
 	multiplayer.connection_failed.connect(connection_failed)
+	
+	Noray.on_disconnect_from_host.connect(_disconnect_from_noray)
 	
 	update_player_counter()
 	
 	if !MultiMaster.player_info["name"].is_empty():
 		playerName.text = MultiMaster.player_info["name"].rstrip("⭐")
 	
-	if MultiMaster.players.size() > 1 or (multiplayer.is_server() and MultiMaster.players.size()==1):
-		if multiplayer.is_server():
+	if MultiMaster.players.size() > 1 or (MultiMaster.is_host and MultiMaster.players.size()==1):
+		if MultiMaster.is_host:
 			start.disabled = false
 			level_select.disabled = false
 			level_select.flat = false
@@ -150,15 +156,16 @@ func chat(text:String):
 
 func player_joined(id, info):
 	print("Player joined")
-	chat("Player %s joined" % info.name)
+	chat("Player %s joined" % info.name + ", id %s"%id)
 	var new_player:Label = player_template.duplicate()
 	new_player.name = str(id)
 	new_player.text = info.name
+	new_player.modulate = Color(info.color)
 	player_container.add_child(new_player)
 	new_player.show()
 	update_player_counter()
 	
-	if id != multiplayer.get_unique_id() and multiplayer.is_server():
+	if id != multiplayer.get_unique_id() and MultiMaster.is_host:
 		_update_selected_level.rpc_id(id, current_level_idx)
 
 func player_left(id):
@@ -206,10 +213,32 @@ func level_select_setup():
 	level_select.select(-1)
 
 func _on_select_level_item_selected(index: int) -> void:
-	if !multiplayer.is_server(): return
+	if !MultiMaster.is_host: return
 	current_level_idx = index
 	_update_selected_level.rpc(index)
 
 @rpc("call_remote", "reliable")
 func _update_selected_level(level_select_idx):
 	level_select.select(level_select_idx)
+
+func _disconnect_from_noray():
+	chat("[color=red]Disconnected from Noray server[/color]")
+
+
+func _on_player_info_update(id:int, info):
+	var players = player_container.get_children().filter(func(player_l:Label): return player_l.name == str(id))
+	if players.size() > 1:
+		chat("[color=red]Error updating player info, duplicate id \"%s\"[/color]"%id)
+		return
+	elif players.size() < 1:
+		chat("[color=red]Error updating player info, id \"%s\" not found[/color]"%id)
+		return
+	var player :Label = players[0]
+	player.modulate = Color(info.color)
+	print("updated player color")
+
+
+func _on_color_picker_popup_closed() -> void:
+	MultiMaster.player_info.color = color_picker.color
+	if MultiMaster.players.size() > 0:
+		MultiMaster.update_player_info.rpc(MultiMaster.player_info)
