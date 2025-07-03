@@ -74,10 +74,9 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	multSync.set_multiplayer_authority(name.to_int())
-	default_albedo = MultiMaster.players[name.to_int()].color
-
-	$MeshInstance3D.set_instance_shader_parameter("albedo", default_albedo)
 	
+	default_albedo = MultiMaster.players[name.to_int()].color
+	$MeshInstance3D.set_instance_shader_parameter("albedo", default_albedo)
 	
 	if multSync.get_multiplayer_authority() == multiplayer.get_unique_id():
 		cam.current = true
@@ -146,7 +145,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			#cam.fov /= scope_mult
 			sense /= sense_scope_mult
 			trigger_gun_ani.rpc(true)
-		else:
+		elif event.is_action_released("scope"):
 			#cam.fov *= scope_mult
 			sense *= sense_scope_mult
 			trigger_gun_ani.rpc(false)
@@ -322,7 +321,7 @@ func update_health_display():
 func play_shoot_sound():
 	shoot_sfx.play()
 
-@rpc("any_peer", "reliable", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func trigger_gun_ani(scope_in:bool):
 	if scope_in:
 		gun_ani.play("scope in")

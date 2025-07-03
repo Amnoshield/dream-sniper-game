@@ -15,9 +15,11 @@ func _ready() -> void:
 	for player in MultiMaster.players:
 		var currentPlayer = playerScene.instantiate()
 		currentPlayer.name = str(MultiMaster.players[player].id)
+		currentPlayer.visible = false
 		add_child(currentPlayer)
 		var spawn = spawn_points[randi_range(0, spawn_points.size()-1)]
 		currentPlayer.global_position = spawn.global_position
+		currentPlayer.visible = true
 	
 	MultiMaster.player_loaded.rpc_id(1) # Tell the server that this peer has loaded.
 

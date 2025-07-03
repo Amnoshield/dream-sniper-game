@@ -65,67 +65,67 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("gun point 1:position")
+tracks/0/path = NodePath("hud gun/gun point 1:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0.269935, -0.307247, -0.542471)]
+"update": 1,
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/path = NodePath("hud gun/gun point 1:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"transitions": PackedFloat32Array(0.25),
+"update": 0,
+"values": [Vector3(0.269935, -0.307247, -0.542471)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/path = NodePath("multiplayer gun/gun point 1:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.25),
 "update": 0,
 "values": [Vector3(0.377601, -0.312447, -0.579996)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/path = NodePath("multiplayer gun/gun point 1:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.25),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("..:fov")
+tracks/4/path = NodePath(".:fov")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(0.25),
 "update": 0,
 "values": [75.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/path = NodePath("..:scoped_in")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -141,7 +141,7 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("gun point 1:position")
+tracks/0/path = NodePath("hud gun/gun point 1:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -153,7 +153,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/path = NodePath("hud gun/gun point 1:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -165,7 +165,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/path = NodePath("multiplayer gun/gun point 1:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -177,7 +177,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/path = NodePath("multiplayer gun/gun point 1:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -189,7 +189,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("..:fov")
+tracks/4/path = NodePath(".:fov")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -201,7 +201,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/path = NodePath("..:scoped_in")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -217,7 +217,7 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("gun point 1:position")
+tracks/0/path = NodePath("hud gun/gun point 1:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -229,7 +229,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("gun point 1:visible")
+tracks/1/path = NodePath("hud gun/gun point 1:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -241,7 +241,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../multiplayer gun/gun point 1:position")
+tracks/2/path = NodePath("multiplayer gun/gun point 1:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -253,7 +253,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../multiplayer gun/gun point 1:rotation")
+tracks/3/path = NodePath("multiplayer gun/gun point 1:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -265,7 +265,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("..:fov")
+tracks/4/path = NodePath(".:fov")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -277,7 +277,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../..:scoped_in")
+tracks/5/path = NodePath("..:scoped_in")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -513,24 +513,15 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath("MeshInstance3D:scale")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath("MeshInstance3D:instance_shader_parameters/albedo")
-properties/5/spawn = false
+properties/5/path = NodePath("Camera3D:position")
+properties/5/spawn = true
 properties/5/replication_mode = 2
-properties/6/path = NodePath("Camera3D:position")
+properties/6/path = NodePath("CollisionShape3D:shape:height")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-properties/7/path = NodePath("CollisionShape3D:shape:height")
+properties/7/path = NodePath(".:health")
 properties/7/spawn = true
 properties/7/replication_mode = 2
-properties/8/path = NodePath(".:health")
-properties/8/spawn = true
-properties/8/replication_mode = 2
-properties/9/path = NodePath("Camera3D/audio/shoot:playing")
-properties/9/spawn = false
-properties/9/replication_mode = 2
-properties/10/path = NodePath("Camera3D/gun ani player:current_animation")
-properties/10/spawn = false
-properties/10/replication_mode = 2
 
 [sub_resource type="Gradient" id="Gradient_45rsp"]
 offsets = PackedFloat32Array(0, 0.494382, 0.842697)
@@ -635,7 +626,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [Color(0.694118, 0, 0.203922, 1)]
 }
 tracks/1/type = "value"
@@ -757,12 +748,13 @@ stream = SubResource("AudioStreamRandomizer_xgwla")
 volume_db = -3.0
 
 [node name="gun ani player" type="AnimationPlayer" parent="Camera3D"]
-root_node = NodePath("../hud gun")
+process_mode = 3
 libraries = {
 &"": SubResource("AnimationLibrary_ylcck")
 }
 
 [node name="hud gun" type="Node3D" parent="Camera3D"]
+process_mode = 3
 
 [node name="gun point 1" type="Node3D" parent="Camera3D/hud gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269935, -0.307247, -0.542471)
@@ -775,6 +767,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269935, -0.307247, -0.54247
 transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, 0, 0)
 
 [node name="multiplayer gun" type="Node3D" parent="Camera3D"]
+process_mode = 3
 
 [node name="gun point 1" type="Node3D" parent="Camera3D/multiplayer gun"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.377601, -0.312447, -0.579996)
@@ -784,7 +777,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.377601, -0.312447, -0.57999
 [node name="gun point 3" type="Node3D" parent="Camera3D/multiplayer gun/gun point 1/gun point 2"]
 
 [node name="awp" parent="Camera3D/multiplayer gun/gun point 1/gun point 2/gun point 3" instance=ExtResource("13_45rsp")]
-transform = Transform3D(-8.58046e-08, -0.383023, 1.96298, -1.67425e-08, 1.96298, 0.383023, -2, 0, -8.74228e-08, 0.17551, -0.0462931, -0.0107785)
+transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74227e-08, 0.17551, -0.0462931, -0.0107785)
 
 [node name="stand check" type="ShapeCast3D" parent="."]
 shape = SubResource("CapsuleShape3D_ykyjo")
@@ -998,7 +991,7 @@ hit_back_faces = false
 
 [node name="bullet trail" type="MeshInstance3D" parent="hitscan"]
 process_mode = 3
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.160823, -1.24082)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 top_level = true
 mesh = SubResource("CylinderMesh_45rsp")
 script = ExtResource("12_ylcck")
