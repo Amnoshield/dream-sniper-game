@@ -71,7 +71,8 @@ const MAX_HEALTH = 100
 var default_albedo:Color
 
 func _ready():
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if get_window().has_focus():
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	multSync.set_multiplayer_authority(name.to_int())
 	
@@ -300,10 +301,10 @@ func inverse_albedo():
 func reset_albedo():
 	hurt_mesh.set_instance_shader_parameter("albedo", default_albedo)
 
-func die(killer_id:int):
+func die(killer_id:int, method:String = "Sniper"):
 	visible = false
 	reload_ani.stop()
-	MultiMaster.add_death_to_scoreboard.rpc(killer_id, multiplayer.get_unique_id())
+	MultiMaster.add_death_to_scoreboard.rpc(killer_id, multiplayer.get_unique_id(), method)
 	#scoreboard.add_kill.rpc(killer_id, multiplayer.get_unique_id())
 	
 	await get_tree().create_timer(2).timeout

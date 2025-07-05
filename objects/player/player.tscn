@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://b75miwdg2c4g5"]
+[gd_scene load_steps=61 format=3 uid="uid://b75miwdg2c4g5"]
 
 [ext_resource type="Script" uid="uid://cu18rhiemfpk7" path="res://objects/player/player.gd" id="1_4vq5b"]
 [ext_resource type="Shader" uid="uid://lufvqmigheht" path="res://assets/baseShader.gdshader" id="2_45rsp"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://dcumu3mbjv210" path="res://objects/player/wall_hit.gd" id="9_bi5m7"]
 [ext_resource type="AudioStream" uid="uid://cbbpbf2a8ooqs" path="res://assets/sfx/hit sound.wav" id="9_psowp"]
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
+[ext_resource type="Script" uid="uid://uxyn5svdgpe3" path="res://objects/player/kill_feed.gd" id="10_xlkbi"]
+[ext_resource type="Script" uid="uid://lkg4aismt8yi" path="res://objects/player/kill_feed_text.gd" id="11_l55sg"]
 [ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
 [ext_resource type="Script" uid="uid://c26vre7rn1bcx" path="res://objects/player/scoreboard.gd" id="12_x5bgp"]
 [ext_resource type="Script" uid="uid://c6ho7c1htyp3c" path="res://objects/player/bullet_trail.gd" id="12_ylcck"]
@@ -205,7 +207,7 @@ tracks/5/path = NodePath("..:scoped_in")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1),
+"times": PackedFloat32Array(0, 0.05),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -496,6 +498,43 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.509804)
 gradient = SubResource("Gradient_jnjyq")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_l55sg"]
+resource_name = "fade"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1.75, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_28utn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yyeqs"]
+_data = {
+&"RESET": SubResource("Animation_28utn"),
+&"fade": SubResource("Animation_l55sg")
+}
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g7ett"]
 properties/0/path = NodePath(".:position")
@@ -862,10 +901,46 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_gnkmh")
 
+[node name="kill feed" type="Panel" parent="UI" node_paths=PackedStringArray("template", "container")]
+process_mode = 3
+custom_minimum_size = Vector2(164, 0)
+offset_left = 915.0
+offset_top = 14.0
+offset_right = 1079.0
+offset_bottom = 14.0
+script = ExtResource("10_xlkbi")
+template = NodePath("VBoxContainer/kill text template")
+container = NodePath("VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/kill feed"]
+custom_minimum_size = Vector2(164, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -0.5
+offset_right = -0.5
+grow_horizontal = 2
+
+[node name="kill text template" type="RichTextLabel" parent="UI/kill feed/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(164, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "123"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+script = ExtResource("11_l55sg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/kill feed/VBoxContainer/kill text template"]
+libraries = {
+&"": SubResource("AnimationLibrary_yyeqs")
+}
+
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_g7ett")
 
-[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "audio_slider", "sense")]
+[node name="pause" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "audio_slider", "sense", "exit")]
 process_mode = 2
 layer = 128
 visible = false
@@ -873,6 +948,7 @@ script = ExtResource("3_jnjyq")
 player = NodePath("..")
 audio_slider = NodePath("Panel/VBoxContainer/audio slider")
 sense = NodePath("Panel/VBoxContainer/sense")
+exit = NodePath("Panel/VBoxContainer/exit")
 
 [node name="Panel" type="Panel" parent="pause"]
 anchors_preset = 15
@@ -947,6 +1023,7 @@ layout_mode = 2
 text = "Quit Game"
 
 [node name="scoreboard" type="CanvasLayer" parent="." node_paths=PackedStringArray("text_label")]
+visible = false
 script = ExtResource("12_x5bgp")
 text_label = NodePath("Panel/RichTextLabel")
 
@@ -1057,6 +1134,7 @@ scale_amount_max = 0.3
 [node name="bulletsniper" parent="." instance=ExtResource("12_c34wb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92875, 0, -11.3997)
 
+[connection signal="animation_finished" from="UI/kill feed/VBoxContainer/kill text template/AnimationPlayer" to="UI/kill feed/VBoxContainer/kill text template" method="_on_animation_player_animation_finished"]
 [connection signal="pressed" from="pause/Panel/VBoxContainer/continue" to="pause" method="_on_continue_pressed"]
 [connection signal="value_changed" from="pause/Panel/VBoxContainer/sense" to="pause" method="_on_sense_value_changed"]
 [connection signal="value_changed" from="pause/Panel/VBoxContainer/audio slider" to="pause" method="_on_audio_value_changed"]

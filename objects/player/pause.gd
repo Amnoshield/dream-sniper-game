@@ -4,6 +4,7 @@ extends CanvasLayer
 @export var lobbyPath:String = "res://menus/lobby/lobby.tscn"
 @export var audio_slider:HSlider
 @export var sense:SpinBox
+@export var exit:Button
 
 var master_bus = AudioServer.get_bus_index("Master")
 var sense_mult = 5000
@@ -12,6 +13,8 @@ func _ready():
 	visible = false
 	audio_slider.value = AudioServer.get_bus_volume_db(master_bus)
 	sense.set_value_no_signal(player.sense * sense_mult)
+	if !MultiMaster.is_host:
+		exit.text = "Leave Lobby"
 	
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -40,7 +43,7 @@ func _on_exit_pressed() -> void:
 	if MultiMaster.is_host:
 		MultiMaster.load_game.rpc(lobbyPath)
 	else:
-		#MultiMaster.remove_multiplayer_peer()
+		MultiMaster.remove_multiplayer_peer()
 		get_tree().change_scene_to_file(lobbyPath)
 
 

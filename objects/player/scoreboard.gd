@@ -16,7 +16,7 @@ func _ready() -> void:
 
 
 @rpc("any_peer", "call_local", "reliable")
-func add_death(killer:int, victim:int):
+func add_death(killer:int, victim:int, _method:String):
 	if scores.has(killer):
 		scores[killer].kills += 1
 	else:
@@ -51,7 +51,7 @@ func update():
 		text_label.text += line
 
 
-func to_hex(color:Color):
+func to_hex(color:Color) -> String:
 	var full_hex:String = "%x"% color.to_rgba32()
 	var fixed_hex = ("%6s"% full_hex.trim_suffix("ff")).replace(" ", "0")
 	return fixed_hex
