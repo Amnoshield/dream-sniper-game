@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dvdawqf48mm2c"]
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
-[ext_resource type="JSON" uid="uid://2o7tnkaekuyd" path="res://menus/lobby/levels.tres" id="2_kssl2"]
+[ext_resource type="JSON" path="res://menus/lobby/levels.json" id="2_kssl2"]
 [ext_resource type="Script" uid="uid://bffylmt1a6anw" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv8s3"]
@@ -11,7 +11,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "color_picker", "start", "join", "host", "leave")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("joinCode", "playerName", "chat_box", "player_container", "player_template", "player_counter", "level_select", "color_picker", "copy_lobby_code", "start", "join", "host", "leave")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -29,6 +29,7 @@ player_template = NodePath("players display/player area/player container/default
 player_counter = NodePath("players display/HBoxContainer/player counter/player tracker")
 level_select = NodePath("control area/VBoxContainer/select level")
 color_picker = NodePath("control area/VBoxContainer/color picker")
+copy_lobby_code = NodePath("control area/VBoxContainer/copy lobby code")
 start = NodePath("control area/VBoxContainer/Start")
 join = NodePath("control area/VBoxContainer/Join")
 host = NodePath("control area/VBoxContainer/host")
@@ -67,7 +68,6 @@ vertical_alignment = 1
 [node name="select level" type="OptionButton" parent="control area/VBoxContainer"]
 layout_mode = 2
 disabled = true
-flat = true
 alignment = 1
 item_count = 2
 popup/item_0/text = "test level"
@@ -110,6 +110,11 @@ clear_button_enabled = true
 [node name="host" type="Button" parent="control area/VBoxContainer"]
 layout_mode = 2
 text = "Host Lobby"
+
+[node name="copy lobby code" type="Button" parent="control area/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Copy Lobby Code"
 
 [node name="HSeparator2" type="HSeparator" parent="control area/VBoxContainer"]
 layout_mode = 2
@@ -272,6 +277,7 @@ emoji_menu_enabled = false
 [connection signal="popup_closed" from="control area/VBoxContainer/color picker" to="." method="_on_color_picker_popup_closed"]
 [connection signal="pressed" from="control area/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="control area/VBoxContainer/copy lobby code" to="." method="_on_copy_lobby_code_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/leave" to="." method="_on_leave_pressed"]
 [connection signal="pressed" from="control area/VBoxContainer/quit game" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="settings" to="settings" method="_on_pressed"]

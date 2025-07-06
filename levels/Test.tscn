@@ -377,38 +377,38 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -297.1
 [node name="skyscraper36" parent="skyscrapers" instance=ExtResource("7_vub2e")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -180.151, -1.08769, -226.882)
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="gears" type="Node3D" parent="."]
 
-[node name="gear" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, -7)
 
-[node name="gear9" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear9" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -7)
 rotation_speed = -1.0
 
-[node name="gear10" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear10" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -5, 1, 16)
 rotation_speed = 2.0
 
-[node name="gear2" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear2" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, -7)
 
-[node name="gear3" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear3" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, 7)
 rotation_speed = -3.0
 
-[node name="gear4" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear4" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 8, 7)
 rotation_speed = 3.0
 
-[node name="gear5" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear5" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 10, 7)
 
-[node name="gear6" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear6" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 17, 7)
 
-[node name="gear7" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear7" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 18, 7)
 
-[node name="gear8" parent="Node3D" instance=ExtResource("8_tqj0n")]
+[node name="gear8" parent="gears" instance=ExtResource("8_tqj0n")]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 16, 25, 7)

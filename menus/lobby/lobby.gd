@@ -12,6 +12,7 @@ var current_level_idx := -1
 @export var player_counter:Label
 @export var level_select:OptionButton
 @export var color_picker:ColorPickerButton
+@export var copy_lobby_code:Button
 
 @export_category("Buttons")
 @export var start:Button
@@ -47,11 +48,11 @@ func _ready():
 		if MultiMaster.is_host:
 			start.disabled = false
 			level_select.disabled = false
-			level_select.flat = false
 		else:
 			start.disabled = true
 			level_select.disabled = true
-			level_select.flat = true
+		
+		copy_lobby_code.disabled = false
 		leave.disabled = false
 		host.disabled = true
 		join.disabled = true
@@ -69,6 +70,7 @@ func _ready():
 		join.disabled = false
 		playerName.editable = true
 		joinCode.editable = true
+		copy_lobby_code.disabled = true
 
 func kicked(msg:String):
 	chat(msg)
@@ -90,7 +92,9 @@ func _on_host_pressed() -> void:
 	join.disabled = true
 	playerName.editable = false
 	level_select.disabled = false
-	level_select.flat = false
+	copy_lobby_code.disabled = false
+	
+	joinCode.text = Noray.oid
 	
 	chat("Lobby code: %s" % Noray.oid)
 	chat("[color=green]Started hosting.[/color]")
@@ -115,6 +119,7 @@ func _on_join_pressed() -> void:
 	join.disabled = true
 	playerName.editable = false
 	joinCode.editable = false
+	copy_lobby_code.disabled = false
 
 func _on_start_pressed() -> void:
 	if current_level_idx == -1:
@@ -142,9 +147,9 @@ func leave_lobby():
 	join.disabled = false
 	playerName.editable = true
 	joinCode.editable = true
+	copy_lobby_code.disabled = true
 	
 	level_select.disabled = true
-	level_select.flat = true
 	level_select.select(-1)
 	current_level_idx = -1
 	
@@ -224,7 +229,6 @@ func _update_selected_level(level_select_idx):
 func _disconnect_from_noray():
 	chat("[color=red]Disconnected from Noray server[/color]")
 
-
 func _on_player_info_update(id:int, info):
 	var players = player_container.get_children().filter(func(player_l:Label): return player_l.name == str(id))
 	if players.size() > 1:
@@ -237,7 +241,6 @@ func _on_player_info_update(id:int, info):
 	player.modulate = Color(info.color)
 	print("updated player color")
 
-
 func _on_color_picker_popup_closed() -> void:
 	MultiMaster.player_info.color = color_picker.color
 	#print(to_hex(color_picker.color))
@@ -248,3 +251,7 @@ func _on_color_picker_popup_closed() -> void:
 	#var full_hex:String = "%x"% color.to_rgba32()
 	#var fixed_hex = ("%6s"% full_hex.trim_suffix("ff")).replace(" ", "0")
 	#return fixed_hex
+
+func _on_copy_lobby_code_pressed() -> void:
+	DisplayServer.clipboard_set(Noray.oid)
+	chat("Copied lobby code!")
