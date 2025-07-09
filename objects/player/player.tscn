@@ -14,10 +14,10 @@
 [ext_resource type="AudioStream" uid="uid://c3s3tkvfawsih" path="res://assets/sfx/hit wall.wav" id="9_xgwla"]
 [ext_resource type="Script" uid="uid://uxyn5svdgpe3" path="res://objects/player/kill_feed.gd" id="10_xlkbi"]
 [ext_resource type="Script" uid="uid://lkg4aismt8yi" path="res://objects/player/kill_feed_text.gd" id="11_l55sg"]
-[ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
+[ext_resource type="PackedScene" uid="uid://oqmir58jbb5o" path="res://assets/imported assets/Styloo Guns Asset Pack GLTF FBX V1.1/Normal version Color and NormalMap/FBX/bulletsniper.fbx" id="12_c34wb"]
 [ext_resource type="Script" uid="uid://c26vre7rn1bcx" path="res://objects/player/scoreboard.gd" id="12_x5bgp"]
 [ext_resource type="Script" uid="uid://c6ho7c1htyp3c" path="res://objects/player/bullet_trail.gd" id="12_ylcck"]
-[ext_resource type="PackedScene" uid="uid://bg30v3ox3hjxo" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp.glb" id="13_45rsp"]
+[ext_resource type="PackedScene" uid="uid://bg30v3ox3hjxo" path="res://assets/imported assets/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp.glb" id="13_45rsp"]
 [ext_resource type="FontFile" uid="uid://hqoxkwtqkd7" path="res://assets/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf" id="13_dthqj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jgssh"]
@@ -1064,7 +1064,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 enabled = false
 target_position = Vector3(0, 0, -400)
 collision_mask = 3
-hit_back_faces = false
 
 [node name="bullet trail" type="MeshInstance3D" parent="hitscan"]
 process_mode = 3

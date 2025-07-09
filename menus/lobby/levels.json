@@ -1,4 +1,5 @@
 [
 	{"name": "Test Level", "path": "res://levels/Test.tscn"},
 	{"name": "Gears", "path": "res://levels/sand_dune_map.tscn"},
+	{"name": "Construction Site", "path": "res://levels/construction_site.tscn"}
 ]

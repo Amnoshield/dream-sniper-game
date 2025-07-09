@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=4 uid="uid://b5v8ymcsd166f"]
 
-[ext_resource type="Texture2D" uid="uid://c0n8pat0gg6f3" path="res://assets/models/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp_snipermat_color.png" id="1_bkuqc"]
+[ext_resource type="Texture2D" uid="uid://c0n8pat0gg6f3" path="res://assets/imported assets/Styloo Guns Asset Pack GLTF FBX V1.1/zEmission version Color only/GLB/awp_snipermat_color.png" id="1_bkuqc"]
 [ext_resource type="Texture2D" uid="uid://c1rojuc04jw01" path="res://assets/models/textures/rust/heavily-rusted-metal_albedo.png" id="2_2ihn6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bhjco"]
