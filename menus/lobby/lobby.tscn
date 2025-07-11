@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cw5ujafuycas" path="res://menus/lobby/lobby.gd" id="1_l1s41"]
 [ext_resource type="JSON" path="res://menus/lobby/levels.json" id="2_kssl2"]
-[ext_resource type="Script" uid="uid://bffylmt1a6anw" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
+[ext_resource type="Script" path="res://menus/lobby/settings.gd" id="3_lv8s3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lv8s3"]
 bg_color = Color(0.6, 0.6, 0.6, 0.784314)
