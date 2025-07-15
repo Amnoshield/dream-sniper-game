@@ -1,6 +1,5 @@
 extends Node
 
-# Autoload named Lobby
 
 # These signals can be connected to by a UI lobby scene or the game scene.
 signal player_connected(peer_id, player_info)
@@ -10,6 +9,8 @@ signal server_disconnected
 signal kicked(msg)
 signal msg_received(msg)
 signal noray_connected
+signal nat_punchthrough_failed
+signal relay_failed
 
 signal death(killer_id:int, victim_id:int, method:String)
 
@@ -89,6 +90,7 @@ func handle_nat_connection(address, port):
 	
 	if err != OK && !is_host:
 		print("NAT failed, using relay")
+		nat_punchthrough_failed.emit()
 		Noray.connect_relay(external_oid)
 		err = OK
 	
@@ -96,7 +98,13 @@ func handle_nat_connection(address, port):
 
 
 func handle_relay_connection(address, port):
-	return await connect_to_server(address, port)
+	var err = await connect_to_server(address, port)
+	
+	if err != OK && !is_host:
+		print("Relay failed, disconecting")
+		relay_failed.emit()
+	
+	return err
 
 
 func connect_to_server(address, port):

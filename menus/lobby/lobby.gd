@@ -38,6 +38,9 @@ func _ready():
 	multiplayer.connection_failed.connect(connection_failed)
 	
 	Noray.on_disconnect_from_host.connect(_disconnect_from_noray)
+	Noray.on_connect_to_host.connect(_connect_to_noray)
+	MultiMaster.nat_punchthrough_failed.connect(_nat_punchthrough_failed)
+	MultiMaster.relay_failed.connect(_relay_failed)
 	
 	update_player_counter()
 	
@@ -96,7 +99,6 @@ func _on_host_pressed() -> void:
 	
 	joinCode.text = Noray.oid
 	
-	chat("Lobby code: %s" % Noray.oid)
 	chat("[color=green]Started hosting.[/color]")
 
 func _on_join_pressed() -> void:
@@ -109,7 +111,6 @@ func _on_join_pressed() -> void:
 		return
 	
 	MultiMaster.last_server_ip = joinCode.text
-	MultiMaster.join(joinCode.text)
 	
 	chat("Joining lobby, this may take a minute ...")
 	MultiMaster.player_info["name"] = playerName.text
@@ -120,6 +121,8 @@ func _on_join_pressed() -> void:
 	playerName.editable = false
 	joinCode.editable = false
 	copy_lobby_code.disabled = false
+	
+	MultiMaster.join(joinCode.text)
 
 func _on_start_pressed() -> void:
 	if current_level_idx == -1:
@@ -160,8 +163,6 @@ func chat(text:String):
 	chat_box.text += text+'\n'
 
 func player_joined(id, info):
-	print("Player joined")
-	chat("Player %s joined" % info.name)
 	var new_player:Label = player_template.duplicate()
 	new_player.name = str(id)
 	new_player.text = info.name
@@ -170,8 +171,13 @@ func player_joined(id, info):
 	new_player.show()
 	update_player_counter()
 	
-	if id != multiplayer.get_unique_id() and MultiMaster.is_host:
-		_update_selected_level.rpc_id(id, current_level_idx)
+	if id == multiplayer.get_unique_id() and !MultiMaster.is_host:
+		chat("[color=green]Joined lobby[/color]")
+	elif id != multiplayer.get_unique_id():
+		chat("Player %s joined" % info.name)
+	
+		if MultiMaster.is_host:
+			_update_selected_level.rpc_id(id, current_level_idx)
 
 func player_left(id):
 	if id == 1:
@@ -228,6 +234,16 @@ func _update_selected_level(level_select_idx):
 
 func _disconnect_from_noray():
 	chat("[color=red]Disconnected from Noray server[/color]")
+
+func _connect_to_noray():
+	chat("[color=green]Connected to Noray server[/color]")
+
+func _nat_punchthrough_failed():
+	chat("[color=yellow]Nat punchthrough failed trying relay...[/color]")
+
+func _relay_failed():
+	chat("[color=red]Relay failed, can not connect[/color]")
+	leave_lobby()
 
 func _on_player_info_update(id:int, info):
 	var players = player_container.get_children().filter(func(player_l:Label): return player_l.name == str(id))
