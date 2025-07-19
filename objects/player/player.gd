@@ -69,8 +69,8 @@ const DAMAGE_BODY := 40
 const KB_OUT := 0
 const KB_IN := 10
 const MAX_HEALTH := 100
-const BOUNCE_TIME := 75 #Time in msec (1sec is 1,000 msec)
-const BOUNCE_BUFFER := 75 #Time in msec (1sec is 1,000 msec)
+const BOUNCE_TIME := 50 #Time in msec (1sec is 1,000 msec)
+const BOUNCE_BUFFER := 50 #Time in msec (1sec is 1,000 msec)
 
 var default_albedo:Color
 
@@ -172,8 +172,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	
 	elif event.is_action_pressed("jump"):
 		if is_on_floor():
-			jump()
 			if Time.get_ticks_msec()-last_landed <= BOUNCE_TIME:
+				jump(2)
+			else:
 				jump()
 		else:
 			last_jump_press = Time.get_ticks_msec()
@@ -226,8 +227,8 @@ func slide():
 	velocity.x = horizontal_velocity.x
 	velocity.z = horizontal_velocity.y
 
-func jump():
-	velocity.y += 7.8
+func jump(multiplier := 1.0):
+	velocity.y += 7.8*multiplier
 
 func if_land():
 	if is_on_floor() and !airborn: return
@@ -241,8 +242,9 @@ func if_land():
 	if crouching and slide_cooldown.is_stopped():
 		slide()
 	
-	if Input.is_action_pressed("jump") and\
-	Time.get_ticks_msec()-last_jump_press <= BOUNCE_BUFFER:
+	if Time.get_ticks_msec()-last_jump_press <= BOUNCE_BUFFER:
+		jump(2)
+	elif Input.is_action_pressed("jump") and !Input.is_action_just_pressed("jump"):
 		jump()
 	
 	last_landed = Time.get_ticks_msec()
