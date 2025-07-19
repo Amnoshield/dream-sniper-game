@@ -43,30 +43,34 @@ extends CharacterBody3D
 @onready var spawn_points = get_tree().get_nodes_in_group("PlayerSpawnPoint")
 
 
-var walking = false
-var crouching = false
-var uncrouch = false
-var airborn = false
+var walking := false
+var crouching := false
+var uncrouch := false
+var airborn := false
+var last_landed := 0
+var last_jump_press := 0
 
 var sense := 0.002
 #var scope_mult := 3
 var sense_scope_mult := 3
 
 #consts
-const SPEED = 5
-const SPRINT_MULT = 1.8
-const CROUCH_MULT = 0.8
-const FRIC = 15.0
-const RAY_LENGTH = 1000
-const ACC = 40.0
-const SLIDE_BOOST = 15
-const MAX_SPEED = 15
+const SPEED := 5
+const SPRINT_MULT := 1.8
+const CROUCH_MULT := 0.8
+const FRIC := 15.0
+const RAY_LENGTH := 1000
+const ACC := 40.0
+const SLIDE_BOOST := 15
+const MAX_SPEED := 15
 #fighting stuff
-const DAMAGE_HEAD = 100
-const DAMAGE_BODY = 40
-const KB_OUT = 0
-const KB_IN = 10
-const MAX_HEALTH = 100
+const DAMAGE_HEAD := 100
+const DAMAGE_BODY := 40
+const KB_OUT := 0
+const KB_IN := 10
+const MAX_HEALTH := 100
+const BOUNCE_TIME := 75 #Time in msec (1sec is 1,000 msec)
+const BOUNCE_BUFFER := 75 #Time in msec (1sec is 1,000 msec)
 
 var default_albedo:Color
 
@@ -169,6 +173,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("jump"):
 		if is_on_floor():
 			jump()
+			if Time.get_ticks_msec()-last_landed <= BOUNCE_TIME:
+				jump()
+		else:
+			last_jump_press = Time.get_ticks_msec()
 	
 	elif event.is_action_pressed("pause"):
 		pause.pause()
@@ -226,15 +234,18 @@ func if_land():
 	elif !is_on_floor():
 		airborn = true
 		return
-		
+	
 	#Landed
 	airborn = false
 	
 	if crouching and slide_cooldown.is_stopped():
 		slide()
 	
-	if Input.is_action_pressed("jump"):
+	if Input.is_action_pressed("jump") and\
+	Time.get_ticks_msec()-last_jump_press <= BOUNCE_BUFFER:
 		jump()
+	
+	last_landed = Time.get_ticks_msec()
 
 func shoot():
 	if reload_ani.is_playing(): return
